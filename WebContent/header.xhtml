@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"> 
+<head runat="server">
+    <meta charset="utf-8" /> 
+  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
+     
+    <link href="css/bootstrap.min.css" rel="stylesheet" /> 
+    <link href="css/font-awesome.min.css" rel="stylesheet" />
+    <link href="css/weather-icons.min.css" rel="stylesheet" /> 
+     
+    <link  href="css/dibaw.min.css" rel="stylesheet" />
+    <link href="css/dem.min.css" rel="stylesheet" />
+    <link href="css/typicons.min.css" rel="stylesheet" />
+    <link href="css/animate.min.css" rel="stylesheet" /> 
+     
+    <script type="text/javascript" src="js/skins.min.js"></script>
+
+        
+     
+     
+    </head> 
+    <body>  
+        <form runat="server" id="gbForm" method="post" data-bv-message="This value is not valid"
+                              data-bv-feedbackicons-valid="glyphicon glyphicon-ok"
+                              data-bv-feedbackicons-invalid="glyphicon glyphicon-remove"
+                              data-bv-submitbuttons='button[type="submit"]'
+                              data-bv-feedbackicons-validating="glyphicon glyphicon-refresh" >
+                
+            
+    <div class="navbar">
+        <div class="navbar-inner">
+            <div class="navbar-container"> 
+                <div class="navbar-header pull-left">
+                    <a href="default.aspx" class="navbar-brand">
+                        <small>
+                            <img src="img/logo.png" alt="" />
+                        </small>
+                    </a>
+                </div> 
+                <div class="sidebar-collapse" id="sidebar-collapse">
+                    <i class="collapse-icon fa fa-bars"></i>
+                </div> 
+                <div class="navbar-header pull-right">
+                    <div class="navbar-account">
+                        <ul class="account-area">
+                        
+                           <li>
+                           
+                                <a class="dropdown-toggle"  title="Logout" onclick="bootbox.confirm({ message: 'Voulez-vous vraiment quitter votre session ?' , callback: function (result) { if (result) { __doPostBack('Disconnect'); } }, title: app_name})">
+                                    <i class="icon fa fa-sign-out" style="font-size: 27px;cursor:pointer"></i>
+                                </a>
+                                
+                                
+                            </li>
+
+                             
+                            <li>
+                                <a class="login-area dropdown-toggle" data-toggle="dropdown">
+                                <div class="iconfa" title="View my data">
+                                        <i class="icon fa fa-user" ></i>
+                                    </div>
+
+                                    <section>
+                                        <h2><span class="profile"><span><%= _userProfile %> </span></span></h2>
+                                    </section>
+                                </a> 
+                                <ul class="pull-right dropdown-menu dropdown-arrow dropdown-messages">
+                                    
+                                   <li>
+                                        <a href="#">
+                                        <i class="icon fa fa-user message-avatar" style="font-size: 27px;"></i>
+                                             <div class="message">
+                                                <span class="message-sender">
+                                                    <%= _userFullName %> 
+                                                </span> 
+                                           </div>
+                                        </a>
+                                    </li>
+                                                                  </ul> 
+                            </li> 
+                        </ul>
+                       <div class="setting">
+                            <a id="btn-setting" title="Settings" href="#">
+                                <i class="icon glyphicon glyphicon-cog"></i>
+                            </a>
+                        </div> 
+                    </div>
+                </div> 
+            </div>
+        </div>
+    </div> 
+    <div class="main-container container-fluid"> 
+        <div class="page-container"> 
+              <div class="page-sidebar" id="sidebar"> 
+                <div class="sidebar-header-wrapper">
+                    <input type="text" id="searchStr" runat="server" class="searchinput" />
+                    <i class="searchicon fa fa-search" onclick="__doPostBack('Search');" ></i>
+                    <div class="searchhelper">Saisir le numero contrat ou le titre pour rechercher des projets...</div>
+                </div>            
+                  				  <ul class='nav sidebar-menu'>
+                      <li runat ="server" id="liDashbaord" visible ="false"><a href="Dashboard.aspx" class='menu-dropdown'><i class="menu-icon glyphicon glyphicon-dashboard"></i><span class="menu-text">DASHBOARD</span></a></li>
+                      <li runat ="server" id="LiSearchEng" visible ="false"><a href="searcheng.aspx" class='menu-dropdown'><i class="menu-icon fa fa-search"></i><span class="menu-text">MOTEUR DE RECHERCHE</span></a></li>
+					  <li runat ="server" id="liCartographie" visible ="false"><a href="#" class='menu-dropdown'><i class="menu-icon fa fa-map-marker"></i><span class="menu-text">CARTOGRAPHIE</span><i class="menu-expand"></i></a> 
+                          <ul class='submenu'>
+                              <li runat ="server" id="liCarte"><a href="#" class='menu-dropdown'><i class="menu-icon glyphicon glyphicon-stats"></i><span class="menu-text">Cartes</span><i class="menu-expand"></i></a>
+                                  <ul class='submenu'>
+                                      <li runat ="server" id="liMapProjet"><a href="mapview.aspx" target="_blank"><i class="menu-icon glyphicon glyphicon-stats"></i><span class="menu-text">  Projets </span></a></li> 
+                                  </ul>
+                              </li> 
+                          </ul>
+                      </li>
+					  <li runat ="server" id="liRapport" visible ="false"><a href="#" class='menu-dropdown' visible ="false"><i class="menu-icon fa fa-book"></i><span class="menu-text">RAPPORTS</span><i class="menu-expand"></i></a>
+                          <ul class='submenu'>
+                              <li  runat ="server" id="liRapportProjet" ><a href="#" class='menu-dropdown'><i class="menu-icon glyphicon glyphicon-folder-open"></i><span class="menu-text">Projets</span><i class="menu-expand"></i></a>
+                                  <ul class='submenu'>
+                                      <li  runat ="server" id="liRapportDetaille" ><a href="rptprojetslist.aspx"><i class="menu-icon glyphicon glyphicon-sort-by-attributes-alt"></i><span class="menu-text">Detaillés</span></a></li>
+                                   
+                                  </ul>
+                              </li>
+                              <li runat ="server" id="liRapportListe" ><a href="#" class='menu-dropdown'><i class="menu-icon glyphicon glyphicon-align-justify"></i><span class="menu-text"> Listes</span><i class="menu-expand"></i></a>
+                                  <ul class='submenu'>
+                                      <li runat ="server" id="liRapportListeSources" ><a href="rptsrclist.aspx"><i class="menu-icon glyphicon glyphicon-list-alt"></i><span class="menu-text"> Sources </span></a></li>
+                                      <li runat ="server" id="liRapportListeInstru" ><a href="rptinstrulist.aspx"><i class="menu-icon glyphicon glyphicon-list"></i><span class="menu-text"> Instruments  </span></a></li>
+                                      <li runat ="server" id="liRapportListeChap" ><a href="rptchaplist.aspx"><i class="menu-icon glyphicon glyphicon-align-justify"></i><span class="menu-text"> Domaines</span></a></li>
+                                      <li runat ="server" id="liRapportListeSect" ><a href="rptseclist.aspx"><i class="menu-icon glyphicon glyphicon-align-justify"></i><span class="menu-text"> Secteurs</span></a></li>
+                                       <li  runat ="server" id="liRapportListeSouSec" ><a href="rptsseclist.aspx"><i class="menu-icon glyphicon glyphicon-th-list"></i><span class="menu-text">Sous-Secteurs</span></a></li>
+                                      <li  runat ="server" id="liRapportListeReg" ><a href="rptreglist.aspx"><i class="menu-icon glyphicon glyphicon-map-marker"></i><span class="menu-text">Régions</span></a></li>
+                                      <li runat ="server" id="liRapportListeCercl" ><a href="rptcercllist.aspx"><i class="menu-icon glyphicon glyphicon-map-marker"></i><span class="menu-text">Cercles</span></a></li>
+                                      <li runat ="server" id="liRapportListeCom" ><a href="rptcomlist.aspx"><i class="menu-icon glyphicon glyphicon-map-marker"></i><span class="menu-text">Communes</span></a></li>
+                                  </ul>
+                              </li>
+                          </ul>
+                      </li>
+					  <li runat ="server" id="liProjet" visible ="false"><a href="#" class='menu-dropdown'><i class="menu-icon fa fa-table"></i><span class="menu-text">PROJETS</span><i class="menu-expand"></i></a>
+                          <ul class='submenu'>
+                              <li runat ="server" id="liAddProjet" ><a href="projets.aspx"><i class="menu-icon glyphicon glyphicon-plus-sign"></i><span class="menu-text">Ajout de projets</span></a></li>
+                              <li runat ="server" id="liListProjet" ><a href="projets-liste.aspx"><i class="menu-icon glyphicon glyphicon-list"></i><span class="menu-text">Liste</span></a></li>
+                          </ul>
+                      </li>
+                      <li runat ="server" id="liCalender" visible ="false"><a href="calendar.aspx" class='menu-dropdown'><i class="menu-icon fa fa-calendar-o"></i><span class="menu-text">CALENDRIER</span></a></li>
+                      <li runat ="server" id="liMedia" visible ="false"><a href="media.aspx" class='menu-dropdown'><i class="menu-icon fa fa-image"></i><span class="menu-text">MEDIA</span></a></li> 
+                      <li runat ="server" id="liParameter" visible ="false"><a href="#" class='menu-dropdown'><i class="menu-icon fa fa-gears"></i><span class="menu-text">PARAMETRAGE</span><i class="menu-expand"></i></a>
+                          <ul class='submenu'>
+                              <li   runat ="server" id="liDevie"><a href="devises.aspx"><i class="menu-icon glyphicon glyphicon-euro"></i><span class="menu-text">Devise</span></a></li>
+                              <li runat ="server" id="liFinance"><a href="#" class='menu-dropdown'><i class="menu-icon fa fa-database"></i><span class="menu-text">Financement</span><i class="menu-expand"></i></a>
+                                  <ul class='submenu'>
+
+                                      <li runat ="server" id="liSources"><a href="sources.aspx"><i class="menu-icon glyphicon glyphicon-stats"></i><span class="menu-text">Sources</span></a></li>
+                                      <li runat ="server" id="liinstruments"><a href="instruments.aspx"><i class="menu-icon glyphicon glyphicon-stats"></i><span class="menu-text">Instruments</span></a></li> 
+                                  </ul>
+                              </li>
+                              <li   runat ="server" id="liIntervention"><a href="#" class='menu-dropdown'><i class="menu-icon fa fa-table"></i><span class="menu-text">Intervention</span><i class="menu-expand"></i></a>
+                                  <ul class='submenu'>
+                                      <li  runat ="server" id="lichapitre"><a href="chapitres.aspx"><i class="menu-icon glyphicon glyphicon-stats"></i><span class="menu-text">Domaines</span></a></li>
+                                      <li  runat ="server" id="lisecteurs"><a href="secteurs.aspx"><i class="menu-icon glyphicon glyphicon-stats"></i><span class="menu-text">Secteurs</span></a></li>
+                                      <li  runat ="server" id="lisoussecteurs"><a href="soussecteurs.aspx"><i class="menu-icon glyphicon glyphicon-stats"></i><span class="menu-text">Sous-Secteurs</span></a></li> 
+                                  </ul>
+                              </li> 
+                              <li   runat ="server" id="lilocalite"><a href="#" class='menu-dropdown'><i class="menu-icon fa fa-map-marker"></i><span class="menu-text">Localités</span><i class="menu-expand"></i></a>
+                                  <ul class='submenu'>
+                                       <li  runat ="server" id="liregions"><a href="regions.aspx"><i class="menu-icon glyphicon glyphicon-map-marker"></i><span class="menu-text">Région</span></a></li>
+                                       <li  runat ="server" id="licercles"><a href="cercles.aspx"><i class="menu-icon glyphicon glyphicon-map-marker"></i><span class="menu-text">Cercle</span></a></li> 
+                                       <li  runat ="server" id="licommunes"><a href="communes.aspx"><i class="menu-icon glyphicon glyphicon-map-marker"></i><span class="menu-text">Commune</span></a></li>
+                                  </ul>
+                              </li>
+                          </ul>
+                      </li>
+                      <li runat="server"  id ="liadmin" visible ="false"><a href="#" class='menu-dropdown'><i class="menu-icon fa fa-table"></i><span class="menu-text">ADMINISTRATION</span><i class="menu-expand"></i></a>
+                          <ul class='submenu'>
+                              <li runat="server" id ="liprproil"><a href="ajout-profil.aspx"  ><i class="menu-icon glyphicon glyphicon-edit"></i><span class="menu-text">Profil & Accès </span><i class="menu-text"></i></a>
+                                  
+                              </li>
+                               
+                              <li  runat="server" id ="liuser"><a href="ajout-user.aspx"  ><i class="menu-icon glyphicon glyphicon-user"></i><span class="menu-text">utilisateur</span><i class="menu-text"></i></a>
+                                  
+                              </li> 
+                          </ul>
+                      </li>
+                      <li runat ="server" id="LiUserManual" visible ="false"><a href="usermanual.aspx" target="_blank" class='menu-dropdown'><i class="menu-icon fa fa-bookmark-o"></i><span class="menu-text">GUIDE UTILISATEUR</span></a></li>
+                  </ul> 
+             </div>             
+            <div class="page-content"> 
+            <div class="page-breadcrumbs">
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="fa fa-home"></i>
+                        <a href="default.aspx">Accueil</a>
+                    </li>  
+                </ul> 
+            </div> 
+                <div class="page-header position-relative">
+                    <asp:ContentPlaceHolder ID="PageHeaderTitlePlaceHolder" runat="server">
+                    </asp:ContentPlaceHolder> 
+                    <div class="header-buttons">
+                        <a class="sidebar-toggler" title ="Hide the left sidebar" href="#">
+                            <i class="fa fa-arrows-h"></i>
+                        </a>
+                        <a class="refresh" id="refresh-toggler" title="Refresh the page" href="">
+                            <i class="glyphicon glyphicon-refresh"></i>
+                        </a>
+                        <a class="fullscreen" id="fullscreen-toggler" title ="Full screen" href="#">
+                            <i class="glyphicon glyphicon-fullscreen"></i>
+                        </a>
+                    </div> 
+                </div> 
+                <div class="page-body">
+                    <asp:ContentPlaceHolder ID="PageBodyPlaceHolder" runat="server">
+                    </asp:ContentPlaceHolder>
+                </div> 
+            </div> 
+        </div> 
+
+    </div>
+             
+    <script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/slimscroll/jquery.slimscroll.min.js"></script> 
+    
+             
+    <script src="js/dibaw.js"></script>
+    <script  src="js/bootbox.js"></script>
+    <script src="js/doAppmin.js"></script>
+    <script src="js/boostrapValidator.js"></script>
+    <script src="js/select2/select2.min.js"></script>
+
+    <script>
+        $(document).ready(function() 
+        {
+
+            $(gbForm)
+                        .on('init.form.bv', function(e, data) {
+                            var $gbForm = $(e.target),
+                                validator = $gbForm.data('bootstrapValidator')
+                        })
+                        .bootstrapValidator()
+                        .on('success.form.bv', function(e) { 
+                            e.preventDefault();
+                            var $gbForm = $(e.target), validator = $gbForm.data('bootstrapValidator'), submitButton = validator.getSubmitButton();
+                            $(gbForm).bootstrapValidator('defaultSubmit');
+                        });
+
+                    });                               
+    </script>
+    <asp:ContentPlaceHolder ID="FooterPlaceHolder" runat="server">
+    </asp:ContentPlaceHolder>
+    </form>
+    </body>
+</html>

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hazelcast xmlns="http://www.hazelcast.com/schema/config"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.hazelcast.com/schema/config
+           http://www.hazelcast.com/schema/config/hazelcast-config-4.0.xsd">
+	
+	<map name="ml.satgrie.pl.ue.model.ml.satgrie.pl.ue.model.Utilisateur">
+		<statistics-enabled>true</statistics-enabled>
+		
+		<eviction size="10000" max-size-policy="PER_NODE"
+			eviction-policy="LRU" />
+	</map>
+
+	<!-- Hibernate regions can be configured here using the map names. -->
+	<map name="ml.satgrie.pl.ue.model.custom_region_name">
+		<statistics-enabled>true</statistics-enabled>
+		
+		<eviction size="10000" max-size-policy="PER_NODE"
+			eviction-policy="LRU" />
+	</map>
+
+	<map name="ml.satgrie.pl.ue.model.Budget">
+		<statistics-enabled>true</statistics-enabled>
+		
+		<eviction size="10000" max-size-policy="PER_NODE"
+			eviction-policy="LRU" />
+	</map>
+	<map name="ml.satgrie.pl.ue.model.Calendrier">
+		<statistics-enabled>true</statistics-enabled>
+		
+		<eviction size="10000" max-size-policy="PER_NODE"
+			eviction-policy="LRU" />
+	</map>
+	<map name="ml.satgrie.pl.ue.model.Cercle">
+		<statistics-enabled>true</statistics-enabled>
+		
+		<eviction size="10000" max-size-policy="PER_NODE"
+			eviction-policy="LRU" />
+	</map>
+	<map name="ml.satgrie.pl.ue.model.Chapitre">
+		<statistics-enabled>true</statistics-enabled>
+		
+		<eviction size="10000" max-size-policy="PER_NODE"
+			eviction-policy="LRU" />
+	</map>
+	<map name="ml.satgrie.pl.ue.model.Commune">
+		<statistics-enabled>true</statistics-enabled>
+		
+		<eviction size="10000" max-size-policy="PER_NODE"
+			eviction-policy="LRU" />
+	</map>
+	<map name="ml.satgrie.pl.ue.model.Contractant">
+		<statistics-enabled>true</statistics-enabled>
+		
+		<eviction size="10000" max-size-policy="PER_NODE"
+			eviction-policy="LRU" />
+	</map>
+	<map name="ml.satgrie.pl.ue.model.Contractanttype">
+		<statistics-enabled>true</statistics-enabled>
+		
+		<eviction size="10000" max-size-policy="PER_NODE"
+			eviction-policy="LRU" />
+	</map>
+	<map name="ml.satgrie.pl.ue.model.Devise">
+		<statistics-enabled>true</statistics-enabled>
+		
+		<eviction size="10000" max-size-policy="PER_NODE"
+			eviction-policy="LRU" />
+	</map>
+	<map name="ml.satgrie.pl.ue.model.Document">
+		<statistics-enabled>true</statistics-enabled>
+		
+		<eviction size="10000" max-size-policy="PER_NODE"
+			eviction-policy="LRU" />
+	</map>
+	<map name="ml.satgrie.pl.ue.model.Etatavancement">
+		<statistics-enabled>true</statistics-enabled>
+		
+		<eviction size="10000" max-size-policy="PER_NODE"
+			eviction-policy="LRU" />
+	</map>
+	<map name="ml.satgrie.pl.ue.model.Instrumentfinancement">
+		<statistics-enabled>true</statistics-enabled>
+		
+		<eviction size="10000" max-size-policy="PER_NODE"
+			eviction-policy="LRU" />
+	</map>
+	<map name="ml.satgrie.pl.ue.model.Localisation">
+		<statistics-enabled>true</statistics-enabled>
+		
+		<eviction size="10000" max-size-policy="PER_NODE"
+			eviction-policy="LRU" />
+	</map>
+	<map name="ml.satgrie.pl.ue.model.Pays">
+		<statistics-enabled>true</statistics-enabled>
+		
+		<eviction size="10000" max-size-policy="PER_NODE"
+			eviction-policy="LRU" />
+	</map>
+	<map name="ml.satgrie.pl.ue.model.Photo">
+		<statistics-enabled>true</statistics-enabled>
+		
+		<eviction size="10000" max-size-policy="PER_NODE"
+			eviction-policy="LRU" />
+	</map>
+	<map name="ml.satgrie.pl.ue.model.Pointfocal">
+		<statistics-enabled>true</statistics-enabled>
+		
+		<eviction size="10000" max-size-policy="PER_NODE"
+			eviction-policy="LRU" />
+	</map>
+	<map name="ml.satgrie.pl.ue.model.Profile">
+		<statistics-enabled>true</statistics-enabled>
+		
+		<eviction size="10000" max-size-policy="PER_NODE"
+			eviction-policy="LRU" />
+	</map>
+	<map name="ml.satgrie.pl.ue.model.Projet">
+		<statistics-enabled>true</statistics-enabled>
+		
+		<eviction size="10000" max-size-policy="PER_NODE"
+			eviction-policy="LRU" />
+	</map>
+	<map name="ml.satgrie.pl.ue.model.Projetchapitre">
+		<statistics-enabled>true</statistics-enabled>
+		
+		<eviction size="10000" max-size-policy="PER_NODE"
+			eviction-policy="LRU" />
+	</map>
+	<map name="ml.satgrie.pl.ue.model.Region">
+		<statistics-enabled>true</statistics-enabled>
+		
+		<eviction size="10000" max-size-policy="PER_NODE"
+			eviction-policy="LRU" />
+	</map>
+	<map name="ml.satgrie.pl.ue.model.Secteur">
+		<statistics-enabled>true</statistics-enabled>
+		
+		<eviction size="10000" max-size-policy="PER_NODE"
+			eviction-policy="LRU" />
+	</map>
+	<map name="ml.satgrie.pl.ue.model.SourceFinancement">
+		<statistics-enabled>true</statistics-enabled>
+		
+		<eviction size="10000" max-size-policy="PER_NODE"
+			eviction-policy="LRU" />
+	</map>
+	<map name="ml.satgrie.pl.ue.model.ml.satgrie.pl.ue.model.SousSecteur">
+		<statistics-enabled>true</statistics-enabled>
+		
+		<eviction size="10000" max-size-policy="PER_NODE"
+			eviction-policy="LRU" />
+	</map>
+	<map name="ml.satgrie.pl.ue.model.Utilisateur">
+		<statistics-enabled>true</statistics-enabled>
+		
+		<eviction size="10000" max-size-policy="PER_NODE"
+			eviction-policy="LRU" />
+	</map>
+
+
+</hazelcast>

@@ -1,0 +1,206 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Gestion Utilisateur</ui:define>
+
+	<ui:param name="viewname" value="Gestion Utilisateur" />
+
+	<ui:define name="content">
+		<h:form id="form" rendered="#{loginController.user.profile.administration == true}">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<p:growl id="messages" showDetail="true" />
+						<p:toolbar>
+							<p:toolbarGroup>
+								<p:commandButton value="Nouveau" icon="pi pi-plus"
+									actionListener="#{utilisateurControllerView.openNew}"
+									update="manage-product-content"
+									oncomplete="PF('manageUtilisateurDialog').show()"
+									styleClass="success-button" style="margin-right: .5rem" />
+								
+							</p:toolbarGroup>
+							<p:toolbarGroup align="right">
+								<p:commandButton value="Export" icon="pi pi-upload"
+									styleClass="help-button" ajax="false">
+									<p:dataExporter type="pdf" target="dt-users"
+										fileName="utilisateurs" />
+								</p:commandButton>
+							</p:toolbarGroup>
+						</p:toolbar>
+
+
+						<p:dataTable id="dt-users" widgetVar="dtUtilisateur"
+							var="utilisateur" value="#{utilisateurControllerView.users}"
+							 styleClass="products-table" selectionMode="single"
+							selection="#{utilisateurControllerView.selectedUser}"
+							rowKey="#{utilisateur.utilisateurId}" paginator="true" rows="10"
+							paginatorPosition="bottom">
+							<f:facet name="header">
+								<div class="products-table-header">
+									<span style="font-weight: bold">Utilisateur </span> <span
+										class="filter-container ui-input-icon-left"> <i
+										class="pi pi-search"></i> <p:inputText id="globalFilter"
+											onkeyup="PF('dtUtilisateur').filter()" placeholder="Search" />
+									</span>
+								</div>
+							</f:facet>
+
+						
+							
+							<p:column headerText="Nom" sortBy="#{utilisateur.utilisateurNom}"
+								filterBy="#{utilisateur.utilisateurNom}">
+								<h:outputText value="#{utilisateur.utilisateurNom}" />
+							</p:column>
+							<p:column exportable="false">
+								
+							</p:column>
+							<p:column headerText="Prenom"
+								sortBy="#{utilisateur.utilisateurPrenom}"
+								filterBy="#{utilisateur.utilisateurPrenom}">
+								<h:outputText value="#{utilisateur.utilisateurPrenom}" />
+							</p:column>
+							<p:column headerText="Email"
+								sortBy="#{utilisateur.utilisateurEmail}"
+								filterBy="#{utilisateur.utilisateurEmail}">
+								<h:outputText value="#{utilisateur.utilisateurEmail}" />
+							</p:column>
+							<p:column headerText="Tel" sortBy="#{utilisateur.utilisateurTel}"
+								filterBy="#{utilisateur.utilisateurTel}">
+								<h:outputText value="#{utilisateur.utilisateurTel}" />
+							</p:column>
+							<p:column headerText="Profile"
+								sortBy="#{utilisateur.profile.profileNom}"
+								filterBy="#{utilisateur.profile.profileNom}">
+								<h:outputText value="#{utilisateur.profile.profileNom}" />
+							</p:column>
+							<p:column headerText="Organisation"
+								sortBy="#{utilisateur.sourcefinancement.sourceFinancementNom}"
+								filterBy="#{utilisateur.sourcefinancement.sourceFinancementNom}">
+								<h:outputText value="#{utilisateur.sourcefinancement.sourceFinancementNom}" />
+							</p:column>
+
+
+							<p:column exportable="false" headerText="Action">
+								<p:commandButton icon="pi pi-pencil"
+									update=":form:manage-product-content"
+									oncomplete="PF('manageUtilisateurDialog').show()"
+									styleClass="edit-button rounded-button success-button"
+									process="@this">
+									<f:setPropertyActionListener value="#{utilisateur}"
+										target="#{utilisateurControllerView.selectedUser}" />
+								</p:commandButton>
+								<p:commandButton class="warning-button rounded-button"
+									icon="pi pi-trash" process="@this"
+									action="#{utilisateurControllerView.deleteSelectedUser()}">
+									<f:setPropertyActionListener value="#{utilisateur}"
+										target="#{utilisateurControllerView.selectedUser}" />
+									<p:confirm header="Confirmation" message="Etes vous sure ?"
+										icon="pi pi-info-circle" />
+
+								</p:commandButton>
+								
+							</p:column>
+
+
+						</p:dataTable>
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+							responsive="true" width="350">
+							<p:commandButton value="Non" type="button"
+								styleClass="ui-confirmdialog-no ui-button-flat" />
+							<p:commandButton value="Oui" type="button"
+								styleClass="ui-confirmdialog-yes" />
+						</p:confirmDialog>
+						<p:dialog header="Utilisateur" width="450" showEffect="fade"
+							modal="true" widgetVar="manageUtilisateurDialog"
+							responsive="true">
+							<p:outputPanel id="manage-product-content" class="ui-fluid">
+								<p:outputPanel
+									rendered="#{not empty utilisateurControllerView.selectedUser}">
+
+									<div class="p-field">
+										<p:outputLabel for="name">Nom</p:outputLabel>
+										<p:inputText id="name" 
+											value="#{utilisateurControllerView.selectedUser.utilisateurNom}"
+										 />
+
+										<p:inputText id="userId" type="hidden"
+											value="#{utilisateurControllerView.selectedUser.utilisateurId}" />
+											<p:outputLabel for="userPwd">MDP</p:outputLabel>
+											<p:inputText id="userPwd" 
+											value="#{utilisateurControllerView.selectedUser.utilisateurPwd}" />
+									</div>
+
+									<div class="p-field">
+										<p:outputLabel for="prenom">Prenom</p:outputLabel>
+										<p:inputText id="prenom" 
+											value="#{utilisateurControllerView.selectedUser.utilisateurPrenom}"
+											 />
+									</div>
+
+									<div class="p-field">
+										<p:outputLabel for="email">Email</p:outputLabel>
+										<p:inputText id="email" 
+											value="#{utilisateurControllerView.selectedUser.utilisateurEmail}"
+											 />
+									</div>
+									
+				
+
+									<div class="p-field">
+										<p:outputLabel for="tel">Tel</p:outputLabel>
+										<p:inputText id="tel"
+											value="#{utilisateurControllerView.selectedUser.utilisateurTel}"
+											 />
+									</div>
+
+
+									<div class="p-field">
+										<p:outputLabel for="profil">Profil</p:outputLabel>
+										<p:selectOneMenu id="profil"
+											value="#{utilisateurControllerView.selectedProfil}">
+
+											<f:selectItem itemLabel="Selectionner le profil" />
+											<f:selectItems
+												value="#{utilisateurControllerView.listProfil}" />
+										</p:selectOneMenu>
+									</div>
+									<div class="p-field">
+										<p:outputLabel for="profil">Organisation</p:outputLabel>
+										<p:selectOneMenu id="pays"
+											value="#{utilisateurControllerView.selectedSourceFinancement}">
+
+											<f:selectItem itemLabel="Selectionner le Pays" />
+											<f:selectItems
+												value="#{utilisateurControllerView.listeSource}" />
+										</p:selectOneMenu>
+									</div>
+
+								</p:outputPanel>
+							</p:outputPanel>
+
+							<f:facet name="footer">
+								<p:commandButton value="Save" icon="pi pi-check"
+									actionListener="#{utilisateurControllerView.saveUser()}"
+									update="manage-product-content"
+									process="manage-product-content @this" />
+								<p:commandButton value="Cancel" icon="pi pi-times"
+									onclick="PF('manageUtilisateurDialog').hide()"
+									class="secondary-button" />
+							</f:facet>
+						</p:dialog>
+
+						
+						
+
+					</div>
+				</div>
+			</div>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

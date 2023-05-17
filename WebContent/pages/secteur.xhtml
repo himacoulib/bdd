@@ -1,0 +1,170 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Gestion Secteur</ui:define>
+
+	<ui:param name="viewname" value="Gestion secteur" />
+
+	<ui:define name="content">
+		<h:form id="form"
+			rendered="#{loginController.user.profile.parametrage == true}">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<p:growl id="messages" showDetail="true" />
+						<p:toolbar>
+							<p:toolbarGroup>
+								<p:commandButton value="Nouveau" icon="pi pi-plus"
+									actionListener="#{secteurControllerView.openNew}"
+									update="manage-product-content"
+									oncomplete="PF('manageSecteurDialog').show()"
+									styleClass="success-button" style="margin-right: .5rem" />
+
+							</p:toolbarGroup>
+							<p:toolbarGroup align="right">
+								<p:commandButton value="Export" icon="pi pi-upload"
+									styleClass="help-button" ajax="false">
+									<p:dataExporter type="pdf" target="dt-secteurs"
+										fileName="secteurs" />
+								</p:commandButton>
+							</p:toolbarGroup>
+						</p:toolbar>
+
+
+						<p:dataTable id="dt-secteurs" widgetVar="dtSecteurs" var="secteur"
+							value="#{secteurControllerView.secteurs}" reflow="true"
+							styleClass="products-table" selectionMode="single"
+							selection="#{secteurControllerView.selectedSecteur}"
+							rowKey="#{secteur.id}" paginator="true" rows="50"
+							rowSelectMode="add" paginatorPosition="bottom">
+							<f:facet name="header">
+								<div class="products-table-header">
+									<span style="font-weight: bold">Secteurs</span> <span
+										class="filter-container ui-input-icon-left"> <i
+										class="pi pi-search"></i> <p:inputText id="globalFilter"
+											onkeyup="PF('dtSecteurs').filter()" placeholder="Search" />
+									</span>
+								</div>
+							</f:facet>
+
+
+
+							<p:column headerText="Nom" sortBy="#{secteur.secteurName}"
+								filterBy="#{secteur.secteurName}">
+								<h:outputText value="#{secteur.secteurName}" />
+							</p:column>
+							<p:column exportable="false">
+
+							</p:column>
+							<p:column headerText="Code" sortBy="#{secteur.secteurCode}"
+								filterBy="#{secteur.secteurCode}">
+								<h:outputText value="#{secteur.secteurCode}" />
+							</p:column>
+
+							<p:column headerText="Descrip" sortBy="#{secteur.secteurDescrip}"
+								filterBy="#{secteur.secteurDescrip}">
+								<h:outputText value="#{secteur.secteurDescrip}" />
+							</p:column>
+
+							<p:column exportable="false" headerText="Action">
+								<p:commandButton icon="pi pi-pencil"
+									update=":form:manage-product-content"
+									oncomplete="PF('manageSecteurDialog').show()"
+									styleClass="edit-button rounded-button success-button"
+									process="@this">
+									<f:setPropertyActionListener value="#{secteur}"
+										target="#{secteurControllerView.selectedSecteur}" />
+								</p:commandButton>
+								<p:commandButton class="warning-button rounded-button"
+									icon="pi pi-trash" process="@this"
+									action="#{secteurControllerView.deleteSecteur()}">
+									<p:confirm header="Confirmation" message="Etes vous sure ?"
+										icon="pi pi-info-circle" />
+									<f:setPropertyActionListener value="#{secteur}"
+										target="#{secteurControllerView.selectedSecteur}" />
+								</p:commandButton>
+							</p:column>
+
+						</p:dataTable>
+
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+							responsive="true" width="350">
+							<p:commandButton value="Non" type="button"
+								styleClass="ui-confirmdialog-no ui-button-flat" />
+							<p:commandButton value="Oui" type="button"
+								styleClass="ui-confirmdialog-yes" />
+						</p:confirmDialog>
+						<p:dialog header="Secteur" width="450" showEffect="fade"
+							modal="true" widgetVar="manageSecteurDialog" responsive="true">
+							<p:outputPanel id="manage-product-content" class="ui-fluid">
+								<p:outputPanel
+									rendered="#{not empty secteurControllerView.selectedSecteur}">
+
+									<div class="p-field">
+										<p:outputLabel
+											rendered="#{secteurControllerView.editSelected == false}"
+											for="chap">Chapitre</p:outputLabel>
+										<p:selectOneMenu id="chap"
+											value="#{secteurControllerView.selectedChapitreOption}"
+											rendered="#{secteurControllerView.editSelected == false}">
+											<f:selectItem itemLabel="Selectionner un chapitre" />
+											<f:selectItems itemLabel="#{chapitre.chapitreName}"
+												itemValue="#{chapitre.chapitreName}"
+												value="#{secteurControllerView.chapitres}" var="chapitre" />
+										</p:selectOneMenu>
+									</div>
+
+									<div class="p-field">
+										<p:outputLabel for="code">Code</p:outputLabel>
+										<p:inputText id="code"
+											value="#{secteurControllerView.selectedSecteur.secteurCode}" />
+
+										<p:inputText id="chapitreId" type="hidden"
+											value="#{secteurControllerView.selectedSecteur.id.chapitreId}"
+											required="true" requiredMessage="Champ obligatoire" />
+
+										<p:inputText id="secteurId" type="hidden"
+											value="#{secteurControllerView.selectedSecteur.id.secteurId}"
+											required="true" requiredMessage="Champ obligatoire" />
+
+
+									</div>
+									<div class="p-field">
+										<p:outputLabel for="name">Nom</p:outputLabel>
+										<p:inputText id="name"
+											value="#{secteurControllerView.selectedSecteur.secteurName}" />
+									</div>
+									<div class="p-field">
+										<p:outputLabel for="descr">Description</p:outputLabel>
+										<p:inputText id="descr"
+											value="#{secteurControllerView.selectedSecteur.secteurDescrip}" />
+									</div>
+
+
+								</p:outputPanel>
+							</p:outputPanel>
+
+							<f:facet name="footer">
+								<p:commandButton value="Save" icon="pi pi-check"
+									actionListener="#{secteurControllerView.saveSecteur}"
+									update="manage-product-content"
+									process="manage-product-content @this" />
+
+								<p:commandButton value="Cancel" icon="pi pi-times"
+									onclick="PF('manageSecteurDialog').hide()"
+									class="secondary-button" />
+							</f:facet>
+						</p:dialog>
+
+
+					</div>
+				</div>
+			</div>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

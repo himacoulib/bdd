@@ -1,0 +1,788 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">UEE</ui:define>
+
+
+	<ui:param name="viewname" value="Gestion Projet" />
+
+	<ui:define name="content">
+		<script
+			src="https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"></script>
+
+		<!-- <h:outputScript name="markerclusterer.js" /> -->
+		<script type="text/javascript">
+            //<![CDATA[
+             $(document).ready(function () {
+            	 setTimeout(clusterer, 2000);
+            });
+             function clusterer() {
+            	 const clusterOptions = {
+               		  imagePath: "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m",
+               		  gridSize: 30,
+               		  zoomOnClick: true,
+               		  maxZoom: 10,
+               		};
+                var $this = PF('map');
+                if ($this) {
+               	 const markerClusterer = new MarkerClusterer($this.map, $this.cfg.markers,  clusterOptions);
+                 }
+             }
+            //]]>
+          // JavaScript Document
+             PrimeFaces.locales ['fr'] = {
+                 closeText: 'Fermer',
+                 prevText: 'Précédent',
+                 nextText: 'Suivant',
+                 monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre' ],
+                 monthNamesShort: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc' ],
+                 dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+                 dayNamesShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
+                 dayNamesMin: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
+                 weekHeader: 'Semaine',
+                 firstDay: 1,
+                 isRTL: false,
+                 showMonthAfterYear: false,
+                 yearSuffix:'',
+                 timeOnlyTitle: 'Choisir l\'heure',
+                 timeText: 'Heure',
+                 hourText: 'Heures',
+                 minuteText: 'Minutes',
+                 secondText: 'Secondes',
+                 currentText: 'Maintenant',
+                 ampm: false,
+                 month: 'Mois',
+                 week: 'Semaine',
+                 day: 'Jour',
+                 allDayText: 'Toute la journée'
+             };
+        </script>
+		<div class="p-grid ui-fluid">
+			<div class="p-col-12 p-md-12">
+
+				<h:form id="form">
+
+					<div class="card">
+						<p:growl id="messages" showDetail="true" />
+						<h5 style="margin-top: 0">Info Projet</h5>
+						<p:separator />
+						<p:inputText id="projetId" type="hidden"
+							value="#{projetFormControllerView.selectedProjet.projetId}" />
+						<p:panelGrid columns="4" layout="grid"
+							styleClass="showcase-text-align-center">
+							<p:outputLabel for="titre">Titre</p:outputLabel>
+							<p:inputText id="titre" placeholder="Titre"
+								requiredMessage="Champ obligatoire"
+								value="#{projetFormControllerView.selectedProjet.projetTitre}"
+								required="true" />
+
+
+							<p:outputLabel for="contrat">Numero contrat</p:outputLabel>
+							<p:inputText placeholder="Numero contrat" id="contrat"
+								value="#{projetFormControllerView.selectedProjet.projetNumContrat}"
+								required="true" requiredMessage="Champ obligatoire" />
+
+							<p:outputLabel for="contrat">Budget Projet</p:outputLabel>
+							<p:inputNumber placeholder="Budget" id="budget"
+								value="#{projetFormControllerView.selectedProjet.projetBudget}"
+								required="true" requiredMessage="Champ obligatoire" />
+
+						</p:panelGrid>
+						<br />
+						<h5>Description</h5>
+						<p:separator />
+						<p:panelGrid columns="4" layout="grid"
+							styleClass="showcase-text-align-center">
+							<p:outputLabel for="obG">Objectif Generaux</p:outputLabel>
+							<p:inputTextarea id="obG" placeholder="Objectif Generaux"
+								required="true" requiredMessage="Champ obligatoire"
+								value="#{projetFormControllerView.selectedProjet.projetObjectifGeneraux}" />
+
+							<p:outputLabel for="obSp">Objectif Spécifique</p:outputLabel>
+							<p:inputTextarea id="obSp" placeholder="Objectif spécifique"
+								value="#{projetFormControllerView.selectedProjet.projetObjectifSpecifiques}" />
+
+							<p:outputLabel for="resulPre">Resultat Attendu</p:outputLabel>
+							<p:inputTextarea id="resulPre" placeholder="Resultat Attendu"
+								value="#{projetFormControllerView.selectedProjet.projetResultatsPrevus}" />
+
+							<p:outputLabel for="descrip">Description</p:outputLabel>
+							<p:inputText id="descrip" placeholder="Description"
+								required="true" requiredMessage="Champ obligatoire"
+								value="#{projetFormControllerView.selectedProjet.projetDescription}" />
+
+							<p:commandButton value="Suivant" icon="pi pi-check" update="form"
+								action="#{projetFormControllerView.saveProjet}" />
+						</p:panelGrid>
+
+
+					</div>
+				</h:form>
+
+				<p:panel
+					rendered="#{projetFormControllerView.selectedProjet.projetId != null}">
+					<div class="p-col-12 p-mb-12 p-lg-12 p-mb-lg-0">
+						<h5>Secteur / Domaine</h5>
+						<p:separator />
+					</div>
+					<h:form id="formSecteur"
+						rendered="#{projetFormControllerView.selectedProjet.projetId != null}">
+						<div class="card">
+							<p:growl id="messagesSecteur" showDetail="true" />
+
+							<p:outputLabel for="chapitre">Domaines</p:outputLabel>
+							<p:selectCheckboxMenu multiple="true" id="chapitre"
+								required="true" requiredMessage="Chapitre obligatoire"
+								value="#{projetFormControllerView.chapitresListString}">
+
+								<p:ajax listener="#{projetFormControllerView.handleChapChange}" />
+
+								<f:selectItem itemLabel="Selectionner un chapitre" />
+								<f:selectItems var="chap"
+									itemLabel="#{chap.chapitreCode}. #{chap.chapitreName}"
+									itemValue="#{chap.chapitreName}"
+									value="#{projetFormControllerView.chapitres}" />
+							</p:selectCheckboxMenu>
+
+							<p:outputLabel for="sect">Secteur</p:outputLabel>
+							<p:selectCheckboxMenu multiple="true" id="sect" required="true"
+								requiredMessage="Chapitre obligatoire"
+								value="#{projetFormControllerView.selectedSecteursString}">
+
+
+								<f:selectItem itemLabel="Selectionner un secteur" />
+								<f:selectItems value="#{projetFormControllerView.secteurs}"
+									var="secteur"
+									itemLabel="#{secteur.secteurCode}. #{secteur.secteurName}"
+									itemValue="#{secteur.secteurName}" />
+							</p:selectCheckboxMenu>
+
+
+							<p:panelGrid columns="1" layout="grid"
+								styleClass="showcase-text-align-center">
+								<!-- <p:scrollPanel style="width:100%;height:500px">
+									<p:panelGrid columns="1" layout="grid">
+										<p:selectManyCheckbox id="secteur"
+											value="#{projetFormControllerView.selectedSecteursString}"
+											layout="responsive" columns="1">
+											<f:selectItems value="#{projetFormControllerView.secteurs}"
+												var="secteur"
+												itemLabel="#{secteur.secteurCode}. #{secteur.secteurName}"
+												itemValue="#{secteur.secteurName}" />
+										</p:selectManyCheckbox>
+									</p:panelGrid>
+								</p:scrollPanel> -->
+								<p:commandButton value="Suivant" icon="pi pi-check"
+									update="formSecteur"
+									action="#{projetFormControllerView.saveSecteur}" />
+							</p:panelGrid>
+
+
+						</div>
+					</h:form>
+				</p:panel>
+
+				<p:panel
+					rendered="#{projetFormControllerView.selectedProjet.chapitres != null}">
+					<div class="p-col-12 p-mb-12 p-lg-12 p-mb-lg-0">
+						<h5>Calendrier</h5>
+						<p:separator />
+					</div>
+					<h:form id="formCalendrier"
+						rendered="#{projetFormControllerView.selectedProjet.projetId != null}">
+						<div class="card">
+							<p:growl id="messagesCalendrier" showDetail="true" />
+							<p:panelGrid columns="4" layout="grid"
+								styleClass="showcase-text-align-center">
+								<p:selectOneMenu required="true"
+									requiredMessage="Champ obligatoire" id="typecal"
+									value="#{projetFormControllerView.calendrier.calendrierTypeId}">
+									<f:selectItem itemLabel="Type" itemValue="" />
+									<f:selectItem itemLabel="Démarrage" itemValue="1" />
+									<f:selectItem itemLabel="Fin initialement prévue" itemValue="2" />
+									<f:selectItem itemLabel="Fin actuellement prévue" itemValue="3" />
+
+								</p:selectOneMenu>
+								<p:datePicker placeholder="Date" id="date"
+									value="#{projetFormControllerView.dateCalendrier}" locale="fr"/>
+								<p:inputText placeholder="Commentaire" id="commentaire"
+									value="#{projetFormControllerView.calendrier.calendrierCommmentaires}"
+									required="true" requiredMessage="Champ obligatoire" />
+
+								<p:commandButton value="Suivant" icon="pi pi-check"
+									update="formCalendrier"
+									action="#{projetFormControllerView.saveCalendar}" />
+							</p:panelGrid>
+
+							<p:dataTable var="cal" editable="true"
+								selection="#{projetFormControllerView.selectedCalendrier}"
+								value="#{projetFormControllerView.selectedProjet.calendriers}">
+
+								<p:ajax event="rowEdit"
+									listener="#{projetFormControllerView.onRowEditCalendrier}"
+									update=":formCalendrier:messagesCalendrier" />
+								<p:ajax event="rowEditCancel"
+									listener="#{projetFormControllerView.onRowCancelCalendrier}"
+									update=":formCalendrier:messagesCalendrier" />
+
+								<p:column headerText="Type">
+									<p:cellEditor>
+										<f:facet name="output">
+											<h:outputText value="Démarrage"
+												rendered="#{cal.calendrierTypeId == 1}" />
+											<h:outputText value="Fin initialement prévue"
+												rendered="#{cal.calendrierTypeId == 2}" />
+											<h:outputText value="Fin actuellement prévue"
+												rendered="#{cal.calendrierTypeId == 3}" />
+										</f:facet>
+										<f:facet name="input">
+											<p:selectOneMenu required="true"
+												requiredMessage="Champ obligatoire" id="typecal"
+												value="#{cal.calendrierTypeId}">
+												<f:selectItem itemLabel="Type" itemValue="" />
+												<f:selectItem itemLabel="Démarrage" itemValue="1" />
+												<f:selectItem itemLabel="Fin initialement prévue"
+													itemValue="2" />
+												<f:selectItem itemLabel="Fin actuellement prévue"
+													itemValue="3" />
+
+											</p:selectOneMenu>
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+
+
+								<p:column headerText="Date">
+									<p:cellEditor>
+										<f:facet name="output">
+											<h:outputText value="#{cal.calendrierDate}">
+												<f:convertDateTime pattern="dd / MM / yyyy" />
+											</h:outputText>
+										</f:facet>
+										<f:facet name="input">
+											<p:datePicker
+												value="#{projetFormControllerView.dateCalendrier}"
+												style="width:100%" label="Date" />
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+
+								<p:column headerText="Commentaire">
+									<p:cellEditor>
+										<f:facet name="output">
+											<h:outputText value="#{cal.calendrierCommmentaires}" />
+										</f:facet>
+										<f:facet name="input">
+											<p:inputText value="#{cal.calendrierCommmentaires}"
+												style="width:100%" label="Date" />
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+
+
+								<p:column style="width:3rem;text-align: center">
+									<p:rowEditor editTitle="Edit Row" cancelTitle="Cancel Edit"
+										styleClass="edit-button rounded-button warning-button"
+										saveTitle="Modifier" />
+									<p:commandButton icon="pi pi-trash"
+										styleClass="edit-button rounded-button danger-button"
+										action="#{projetFormControllerView.deleteCalendrier()}"
+										process="@this">
+										<f:setPropertyActionListener value="#{cal}"
+											target="#{projetFormControllerView.selectedCalendrier}" />
+									</p:commandButton>
+
+								</p:column>
+
+							</p:dataTable>
+
+
+
+						</div>
+
+					</h:form>
+				</p:panel>
+
+				<p:panel
+					rendered="#{projetFormControllerView.selectedProjet.calendriers  != null}">
+					<div class="p-col-12 p-mb-12 p-lg-12 p-mb-lg-0">
+						<h5>Partenaires</h5>
+						<p:separator />
+					</div>
+					<h:form id="formPartenaire"
+						rendered="#{projetFormControllerView.selectedProjet.projetId != null}">
+						<div class="card">
+							<p:growl id="messagesPartenaire" showDetail="true" />
+							<p:panelGrid columns="5" layout="grid"
+								styleClass="showcase-text-align-center">
+								<p:selectOneMenu id="typeContractant" required="true"
+									requiredMessage="Champ obligatoire"
+									value="#{projetFormControllerView.selectedTypeContractant}">
+									<p:ajax event="change" process="@this"></p:ajax>
+									<f:selectItem itemLabel="Type " />
+									<f:selectItems var="typecontractant"
+										itemLabel="#{typecontractant.contractantTypeNom}"
+										itemValue="#{typecontractant.contractantTypeNom}"
+										value="#{projetFormControllerView.typecontractants}" />
+								</p:selectOneMenu>
+
+								<p:inputText placeholder="Nom" id="nom"
+									value="#{projetFormControllerView.contractant.contractantNom}"
+									required="true" requiredMessage="Champ obligatoire" />
+
+								<p:inputText placeholder="Sigle" id="sigle"
+									value="#{projetFormControllerView.contractant.contractantSigle}"
+									required="true" requiredMessage="Champ obligatoire" />
+
+								<p:selectOneMenu required="true"
+									requiredMessage="Champ obligatoire" id="statutContractant"
+									value="#{projetFormControllerView.contractant.contractantStatutId}">
+									<f:selectItem itemLabel="Choisir statut contractabt"
+										itemValue="" />
+									<f:selectItem itemLabel="Contractant" itemValue="1" />
+									<f:selectItem itemLabel="Partenaire" itemValue="2" />
+								</p:selectOneMenu>
+
+								<p:commandButton value="Suivant" icon="pi pi-check"
+									update="formCalendrier"
+									action="#{projetFormControllerView.saveContractant}" />
+							</p:panelGrid>
+							<p:dataTable var="contra" editable="true"
+								value="#{projetFormControllerView.selectedProjet.contractants}">
+								<p:ajax event="rowEdit"
+									listener="#{projetFormControllerView.onRowEditContractant}"
+									update=":formPartenaire:messagesPartenaire" />
+								<p:ajax event="rowEditCancel"
+									listener="#{projetFormControllerView.onRowCancelContractant}"
+									update=":formPartenaire:messagesPartenaire" />
+								<p:column headerText="Statut">
+									<p:cellEditor>
+										<f:facet name="output">
+											<h:outputText value="Contractant"
+												rendered="#{contra.contractantStatutId == 1}" />
+											<h:outputText value="Partenaire"
+												rendered="#{contra.contractantStatutId == 2}" />
+										</f:facet>
+										<f:facet name="input">
+											<f:selectItem itemLabel="Type " />
+											<f:selectItems var="typecontractant"
+												itemLabel="#{typecontractant.contractantTypeNom}"
+												itemValue="#{typecontractant.contractantTypeNom}"
+												value="#{projetFormControllerView.typecontractants}" />
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+
+								<p:column headerText="Nom">
+									<p:cellEditor>
+										<f:facet name="output">
+											<h:outputText value="#{contra.contractantNom}" />
+										</f:facet>
+										<f:facet name="input">
+											<p:inputText value="#{contra.contractantNom}" required="true"
+												requiredMessage="Nom obligatoire" style="width:100%"
+												label="Nom" />
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+
+								<p:column headerText="Sigle">
+									<p:cellEditor>
+										<f:facet name="output">
+											<h:outputText value="#{contra.contractantSigle}" />
+										</f:facet>
+										<f:facet name="input">
+											<p:inputText value="#{contra.contractantSigle}"
+												required="true" requiredMessage="Sigle obligatoire"
+												style="width:100%" label="Nom" />
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+
+								<p:column headerText="Partenaire type">
+									<p:cellEditor>
+										<f:facet name="output">
+											<h:outputText
+												value="#{contra.contractanttype.contractantTypeNom}" />
+										</f:facet>
+										<f:facet name="input">
+											<p:selectOneMenu id="typeContractant" required="true"
+												requiredMessage="Champ obligatoire"
+												value="#{contra.contractanttype.contractantTypeNom}">
+												<p:ajax event="change" process="@this"></p:ajax>
+												<f:selectItem itemLabel="Type " />
+												<f:selectItems var="typecontractant"
+													itemLabel="#{typecontractant.contractantTypeNom}"
+													itemValue="#{typecontractant.contractantTypeNom}"
+													value="#{projetFormControllerView.typecontractants}" />
+											</p:selectOneMenu>
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+
+
+								<p:column style="width:3rem;text-align: center">
+									<p:rowEditor editTitle="Edit Row" cancelTitle="Cancel Edit"
+										saveTitle="Modifier" />
+									<p:commandButton icon="pi pi-trash"
+										styleClass="edit-button rounded-button danger-button"
+										action="#{projetFormControllerView.deleteContractant()}"
+										process="@this">
+										<f:setPropertyActionListener value="#{contra}"
+											target="#{projetFormControllerView.selectedContractant}" />
+									</p:commandButton>
+
+								</p:column>
+
+							</p:dataTable>
+
+
+						</div>
+					</h:form>
+				</p:panel>
+
+				<p:panel
+					rendered="#{projetFormControllerView.selectedProjet.contractants  != null}">
+					<div class="p-col-12 p-mb-12 p-lg-12 p-mb-lg-0">
+						<h5>Budget</h5>
+						<p:separator />
+					</div>
+					<h:form id="formBudget"
+						rendered="#{projetFormControllerView.selectedProjet.projetId != null}">
+						<div class="card">
+							<p:growl id="messagesBudget" showDetail="true" />
+							<p:panelGrid columns="5" layout="grid"
+								styleClass="showcase-text-align-center">
+								<p:selectOneMenu style="display: inline-block;" id="source"
+									required="true" requiredMessage="Champ obligatoire"
+									value="#{projetFormControllerView.selectedSource}">
+									<!-- <p:ajax
+										listener="#{projetFormControllerView.handleSourceChange}" /> -->
+
+									<f:selectItem itemLabel="Selectionner une source"
+										noSelectionOption="true" />
+									<f:selectItems var="source"
+										itemLabel="#{source.sourceFinancementNom}"
+										itemValue="#{source.sourceFinancementNom}"
+										value="#{projetFormControllerView.sources}" />
+								</p:selectOneMenu>
+
+								<!-- <p:selectOneMenu id="instrument"
+									value="#{projetFormControllerView.selectedInstrument}">
+									<p:ajax event="change" process="@this"></p:ajax>
+
+									<f:selectItem itemValue="" noSelectionOption="true"
+										itemLabel="Selectionner un instrument" />
+									<f:selectItems var="instrument"
+										itemLabel="#{instrument.instrumentFinancementNom}"
+										itemValue="#{instrument.instrumentFinancementNom}"
+										value="#{projetFormControllerView.instrumentsFilter}" />
+								</p:selectOneMenu> -->
+
+								<p:selectOneMenu required="true"
+									requiredMessage="Champ obligatoire" id="typebudget"
+									value="#{projetFormControllerView.budget.idTypeBudget}">
+									<f:selectItem itemLabel="Type" itemValue="" />
+									<f:selectItem itemLabel="Subvention" itemValue="1" />
+									<f:selectItem itemLabel="Prêt" itemValue="2" />
+									<f:selectItem itemLabel="Autres" itemValue="3" />
+
+								</p:selectOneMenu>
+
+								<p:inputNumber placeholder="Montant contribution en EURO"
+									id="montant"
+									value="#{projetFormControllerView.budget.budgetContribution}"
+									required="true" requiredMessage="Champ obligatoire" />
+
+								<p:commandButton value="Suivant" icon="pi pi-check"
+									update="formBudget"
+									action="#{projetFormControllerView.saveBudget}" />
+							</p:panelGrid>
+
+							<p:dataTable var="budg" editable="true" id="dd"
+								value="#{projetFormControllerView.selectedProjet.budgets}">
+
+								<p:ajax event="rowEdit"
+									listener="#{projetFormControllerView.onRowEditBudget}"
+									update=":formBudget:messagesBudget" />
+								<p:ajax event="rowEditCancel"
+									listener="#{projetFormControllerView.onRowCancelBudget}"
+									update=":formBudget:messagesBudget" />
+
+								<!-- <p:column headerText="Instrument Financement">
+									<h:outputText rendered="#{budg.budgetId != null}"
+										value="#{budg.instrumentfinancement.instrumentFinancementNom}" />
+								</p:column> -->
+
+								<p:column headerText="Source Financement">
+									<h:outputText rendered="#{budg.budgetId != null}"
+										value="#{budg.instrumentfinancement.sourcefinancement.sourceFinancementNom}">
+
+									</h:outputText>
+
+								</p:column>
+								<p:column headerText="Budget">
+									<p:cellEditor>
+										<f:facet name="output">
+											<h:outputText value="#{budg.budgetContribution}">
+												<f:convertNumber type="currency" currencySymbol="€"
+													locale="fr-FR" />
+											</h:outputText>
+										</f:facet>
+										<f:facet name="input">
+											<p:inputNumber value="#{budg.budgetContribution}"
+												style="width:100%" label="Budget " />
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+								<p:column headerText="Type Financement">
+									<p:cellEditor>
+										<f:facet name="output">
+											<h:outputText value="Subvention"
+												rendered="#{budg.idTypeBudget == 1}" />
+											<h:outputText value="Prêt"
+												rendered="#{budg.idTypeBudget == 2}" />
+											<h:outputText value="Autres"
+												rendered="#{budg.idTypeBudget == 3}" />
+										</f:facet>
+										<f:facet name="input">
+											<p:selectOneMenu required="true"
+												rendered="#{budg.idTypeBudget != null}"
+												requiredMessage="Champ obligatoire" id="typebudget"
+												value="#{budg.idTypeBudget}">
+												<f:selectItem itemLabel="Type" itemValue="" />
+												<f:selectItem itemLabel="Subvention" itemValue="1" />
+												<f:selectItem itemLabel="Prêt" itemValue="2" />
+												<f:selectItem itemLabel="Autres" itemValue="3" />
+
+											</p:selectOneMenu>
+
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+
+								<p:column style="width:3rem;text-align: center">
+									<p:rowEditor editTitle="Modifier" cancelTitle="Annuler"
+										rendered="#{budg.instrumentfinancement.instrumentfinancementId != projetFormControllerView.instruAutre.instrumentfinancementId}"
+										saveTitle="Save Row" />
+									<p:commandButton icon="pi pi-trash"
+										rendered="#{budg.instrumentfinancement.instrumentfinancementId != projetFormControllerView.instruAutre.instrumentfinancementId}"
+										styleClass="edit-button rounded-button danger-button"
+										action="#{projetFormControllerView.deleteBudget()}"
+										process="@this">
+										<f:setPropertyActionListener value="#{budg}"
+											target="#{projetFormControllerView.selectedBudget}" />
+									</p:commandButton>
+
+								</p:column>
+							</p:dataTable>
+
+						</div>
+					</h:form>
+				</p:panel>
+
+				<p:panel
+					rendered="#{projetFormControllerView.selectedProjet.budgets  != null}">
+					<h:form id="formEtat"
+						rendered="#{projetFormControllerView.selectedProjet.projetId != null}">
+						<div class="card">
+							<div class="p-col-12 p-mb-12 p-lg-12 p-mb-lg-0">
+								<h5>Etat avancement</h5>
+								<p:separator />
+							</div>
+							<p:growl id="messagesEtat" showDetail="true" />
+							<p:panelGrid columns="2" layout="grid"
+								styleClass="showcase-text-align-center">
+
+								<p:inputText placeholder="Etat avancement" id="commentaire"
+									value="#{projetFormControllerView.etatavancement.etatAvancementText}"
+									required="true" requiredMessage="Champ obligatoire" />
+
+								<p:commandButton value="Suivant" icon="pi pi-check"
+									update="formEtat"
+									action="#{projetFormControllerView.saveEtatavancement()}" />
+							</p:panelGrid>
+
+							<p:dataTable var="etat"
+								value="#{projetFormControllerView.selectedProjet.etatavancements}">
+
+								<p:column headerText="Etat">
+									<h:outputText value="#{etat.etatAvancementText}" />
+								</p:column>
+
+								<p:column style="width:3rem;text-align: center">
+
+									<p:commandButton icon="pi pi-trash"
+										styleClass="edit-button rounded-button danger-button"
+										action="#{projetFormControllerView.deleteEtatavancement()}"
+										process="@this">
+										<f:setPropertyActionListener value="#{etat}"
+											target="#{projetFormControllerView.etatavancementSelected}" />
+									</p:commandButton>
+
+								</p:column>
+							</p:dataTable>
+
+						</div>
+					</h:form>
+
+				</p:panel>
+
+				<p:panel
+					rendered="#{projetFormControllerView.selectedProjet.etatavancements  != null}">
+					<div class="p-col-12 p-mb-12 p-lg-12 p-mb-lg-0">
+						<h5>Localisation</h5>
+						<p:separator />
+					</div>
+					<h:form id="formLocalisation"
+						rendered="#{projetFormControllerView.selectedProjet.projetId != null}">
+						<div class="card">
+							<p:growl id="messagesLocalisation" showDetail="true" />
+							<p:panelGrid columns="2" layout="grid"
+								styleClass="showcase-text-align-center">
+
+
+
+								<p:outputLabel for="region">Region</p:outputLabel>
+								<p:selectCheckboxMenu id="region" required="true"
+									multiple="true" requiredMessage="Champ obligatoire"
+									value="#{projetFormControllerView.regionStrings}"
+									style="padding: 1.5rem 0.5rem;">
+									<p:ajax
+										listener="#{projetFormControllerView.handleRegionChange}" />
+
+									<f:selectItems var="region" itemLabel="#{region.regionNom}"
+										itemValue="#{region.regionNom}"
+										value="#{projetFormControllerView.regions}" />
+								</p:selectCheckboxMenu>
+
+								<p:outputLabel for="cercle">Cercle</p:outputLabel>
+								<p:selectCheckboxMenu id="cercle" required="true"
+									multiple="true" requiredMessage="Champ obligatoire"
+									value="#{projetFormControllerView.cercleStrings}"
+									style="padding: 1.5rem 0.5rem;">
+									<p:ajax
+										listener="#{projetFormControllerView.handleCercleChange}" />
+
+									<f:selectItems var="cercle" itemLabel="#{cercle.cerlceName}"
+										itemValue="#{cercle.cerlceName}"
+										value="#{projetFormControllerView.cerclesFilter}" />
+								</p:selectCheckboxMenu>
+
+
+
+								<p:outputLabel for="commune">Commune</p:outputLabel>
+								<p:selectCheckboxMenu id="commune" required="true"
+									multiple="true" requiredMessage="Champ obligatoire"
+									value="#{projetFormControllerView.communeStrings}"
+									style="padding: 1.5rem 0.5rem;">
+									<f:selectItems var="commune" itemLabel="#{commune.communeNom}"
+										itemValue="#{commune.communeNom}"
+										value="#{projetFormControllerView.communesFilter}" />
+								</p:selectCheckboxMenu>
+
+
+								<p:commandButton value="Suivant" icon="pi pi-check"
+									update="formLocalisation"
+									action="#{projetFormControllerView.saveLocalisation}" />
+
+							</p:panelGrid>
+
+							<p:dataTable var="loc" id="loca"
+								value="#{projetFormControllerView.selectedProjet.localisations}">
+
+
+								<p:column headerText="Localisation">
+									<h:outputText value="#{loc.localisationDescActifs}" />
+								</p:column>
+								<p:column headerText="Latitude">
+									<h:outputText value="#{loc.localisationLat}" />
+								</p:column>
+
+								<p:column headerText="Longitude">
+									<h:outputText value="#{loc.localisationLong}" />
+								</p:column>
+
+								<p:column style="width:3rem;text-align: center">
+
+									<p:commandButton icon="pi pi-trash"
+										styleClass="edit-button rounded-button danger-button"
+										action="#{projetFormControllerView.deleteLocalisation()}"
+										process="@this">
+										<f:setPropertyActionListener value="#{loc}"
+											target="#{projetFormControllerView.selectedLocalisation}" />
+									</p:commandButton>
+
+								</p:column>
+							</p:dataTable>
+
+							<p:gmap
+								center="#{projetFormControllerView.selectedProjet.localisations[0].localisationLat},
+								#{projetFormControllerView.selectedProjet.localisations[0].localisationLong}"
+								zoom="8" type="HYBRID" widgetVar="map" id="map"
+								rendered="#{projetFormControllerView.selectedProjet.localisations.size() > 0}"
+								style="width:100%;height:400px"
+								model="#{projetFormControllerView.simpleModel}">
+								
+							</p:gmap>
+						</div>
+					</h:form>
+
+				</p:panel>
+
+				<p:panel
+					rendered="#{projetFormControllerView.selectedProjet.localisations != null}">
+					<div class="p-col-12 p-mb-12 p-lg-12 p-mb-lg-0">
+						<h5>Joindre photo</h5>
+						<p:separator />
+					</div>
+					<h:form id="formPhoto"
+						rendered="#{projetFormControllerView.selectedProjet.projetId != null}">
+						<div class="card">
+							<p:growl id="messagesPhoto" showDetail="true" />
+							<p:panelGrid columns="1" layout="grid"
+								styleClass="showcase-text-align-center">
+								<p:fileUpload
+									listener="#{projetFormControllerView.handleFileUpload}"
+									mode="advanced" dragDropSupport="false" multiple="false"
+									update="messagesPhoto" sizeLimit="100000"
+									allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+
+							</p:panelGrid>
+
+
+						</div>
+					</h:form>
+
+					<div class="p-col-12 p-mb-12 p-lg-12 p-mb-lg-0">
+						<h5>Joindre Document</h5>
+						<p:separator />
+					</div>
+					<h:form id="formDocument"
+						rendered="#{projetFormControllerView.selectedProjet.projetId != null}">
+						<div class="card">
+							<p:growl id="messagesDocument" showDetail="true" />
+							<p:panelGrid columns="1" layout="grid"
+								styleClass="showcase-text-align-center">
+								<p:fileUpload
+									listener="#{projetFormControllerView.handleDocumentUpload}"
+									mode="advanced" dragDropSupport="false" multiple="false"
+									update="messagesDocument" sizeLimit="100000000"
+									allowTypes="/(\.|\/)(pdf|jpe?g|png)$/" />
+
+							</p:panelGrid>
+
+
+						</div>
+					</h:form>
+				</p:panel>
+
+
+			</div>
+		</div>
+	</ui:define>
+
+</ui:composition>

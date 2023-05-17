@@ -1,0 +1,77 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Rapport Secteur</ui:define>
+
+	<ui:param name="viewname" value="Rapport Secteur" />
+
+	<ui:define name="content">
+		<h:form id="form"
+			rendered="#{loginController.user.profile.rapports == true}">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<div>
+
+							<p:commandButton value="Exporter en PDF" icon="pi pi-upload"
+								styleClass="help-button" ajax="false">
+								<p:dataExporter type="pdf" target="dt-secteurs"
+									fileName="secteur" />
+							</p:commandButton>
+							&#160;&#160;
+							<p:commandButton value="Exporter en Excel" icon="pi pi-upload"
+								styleClass="success-button" ajax="false">
+								<p:dataExporter type="xls" target="dt-secteurs"
+									fileName="secteur" />
+							</p:commandButton>
+						</div>
+
+						<p:dataTable id="dt-secteurs" widgetVar="dtSecteurs" var="secteur"
+							value="#{rapportSecteurControllerView.secteurs}" reflow="true"
+							styleClass="products-table"
+							selection="#{rapportSecteurControllerView.selectedSecteur}"
+							rowKey="#{secteur.id}" paginator="true" rows="50"
+							paginatorPosition="bottom">
+							<f:facet name="header">
+								<div class="products-table-header">
+									<span style="font-weight: bold">Secteurs</span> <span
+										class="filter-container ui-input-icon-left"> <i
+										class="pi pi-search"></i> <p:inputText id="globalFilter"
+											onkeyup="PF('dtSecteurs').filter()" placeholder="Search" />
+									</span>
+								</div>
+							</f:facet>
+
+
+
+							<p:column headerText="Nom" sortBy="#{secteur.secteurName}"
+								filterBy="#{secteur.secteurName}">
+								<h:outputText value="#{secteur.secteurName}" />
+							</p:column>
+							<p:column exportable="false">
+
+							</p:column>
+							<p:column headerText="Code" sortBy="#{secteur.secteurCode}"
+								filterBy="#{secteur.secteurCode}">
+								<h:outputText value="#{secteur.secteurCode}" />
+							</p:column>
+
+							<p:column headerText="Descrip" sortBy="#{secteur.secteurDescrip}"
+								filterBy="#{secteur.secteurDescrip}">
+								<h:outputText value="#{secteur.secteurDescrip}" />
+							</p:column>
+
+						</p:dataTable>
+
+
+					</div>
+				</div>
+			</div>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

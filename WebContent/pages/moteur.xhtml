@@ -1,0 +1,241 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Moteur de recherche</ui:define>
+
+	<ui:param name="viewname" value="Moteur de recherche" />
+
+	<ui:define name="content">
+		<h:form id="form"
+			rendered="#{loginController.user.profile.moteurRecherche == true}">
+			<div style="text-align: center">
+				<p:commandButton value="Filtrer" icon="pi pi-search" process="@this"
+					styleClass="success-button"
+					action="#{moteurControllerView.filteredProject}" update="searchTab" />
+				&#160;&#160;
+				<p:commandButton styleClass="danger-button" value="Reinitialiser"
+					icon="pi pi-trash" process="@this"
+					action="#{moteurControllerView.reinitialiserFiltre()}" />
+				&#160;&#160;
+				<p:commandButton value="Exporter en PDF" icon="pi pi-upload"
+					styleClass="help-button" ajax="false">
+					<p:dataExporter type="pdf" target="dt-projet" fileName="projet" />
+				</p:commandButton>
+				&#160;&#160;
+				<p:commandButton value="Exporter en Excel" icon="pi pi-upload"
+					styleClass="success-button" ajax="false">
+					<p:dataExporter type="xls" target="dt-projet" fileName="projet" />
+				</p:commandButton>
+			</div>
+			<br />
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					Total projet: #{moteurControllerView.getProjectDatas.size() }
+					<div class="card">
+						<p:panelGrid id="searchTab" columns="7" style="margin: 0px">
+							<ui:fragment
+								rendered="#{ user.sourcefinancement.sourceFinancementNom eq 'UE'}">
+								<p:outputLabel for="source">
+									<strong>Source: </strong>
+								</p:outputLabel>
+								<p:selectCheckboxMenu multiple="true" filter="true"
+									filterMatchMode="startsWith" id="source" style="width:120px"
+									value="#{moteurControllerView.sourceStrings}">
+									<p:ajax event="change" process="@this"></p:ajax>
+
+									<f:selectItems var="source"
+										itemLabel="#{source.sourceFinancementNom}"
+										itemValue="#{source.sourceFinancementNom}"
+										value="#{moteurControllerView.sources}" />
+								</p:selectCheckboxMenu>
+							</ui:fragment>
+
+							<p:outputLabel for="status">
+								<strong>Status: </strong>
+							</p:outputLabel>
+							<p:selectCheckboxMenu multiple="true" filter="true"
+								filterMatchMode="startsWith" id="status"
+								style="width:120px;height:auto;"
+								value="#{moteurControllerView.statusString}">
+								<p:ajax event="change" process="@this"></p:ajax>
+
+								<f:selectItems value="#{moteurControllerView.statusProjet}" />
+
+							</p:selectCheckboxMenu>
+
+							<p:outputLabel for="domaine">
+								<strong>Domaine</strong>
+							</p:outputLabel>
+							<p:selectCheckboxMenu multiple="true" filter="true"
+								filterMatchMode="startsWith" id="domaine"
+								style="width:120px;height:auto;"
+								value="#{moteurControllerView.chapitreStrings}">
+								<p:ajax event="change" process="@this"></p:ajax>
+								<p:ajax listener="#{moteurControllerView.handleChapChange}" />
+
+								<f:selectItems var="chapitre"
+									itemLabel="#{chapitre.chapitreCode}:#{chapitre.chapitreName}"
+									itemValue="#{chapitre.chapitreName}"
+									value="#{moteurControllerView.chapitres}" />
+							</p:selectCheckboxMenu>
+
+
+							<p:outputLabel for="secteur">
+								<strong>Secteur</strong>
+							</p:outputLabel>
+							<p:selectCheckboxMenu multiple="true" filter="true"
+								filterMatchMode="startsWith" id="secteur"
+								style="width:120px;height:auto;"
+								value="#{moteurControllerView.secteurStrings}">
+								<p:ajax event="change" process="@this"></p:ajax>
+
+
+								<f:selectItems var="secteur" itemLabel="#{secteur.secteurCode}:#{secteur.secteurName}"
+									itemValue="#{secteur.secteurName}"
+									value="#{moteurControllerView.secteurs}" />
+							</p:selectCheckboxMenu>
+							<p:outputLabel for="typecontractant">
+								<strong>Type contractant</strong>
+							</p:outputLabel>
+							<p:selectCheckboxMenu multiple="true" filter="true"
+								filterMatchMode="startsWith" id="typecontractant"
+								style="width:120px;height:auto;"
+								value="#{moteurControllerView.contractanttypeStrings}">
+								<p:ajax
+									listener="#{moteurControllerView.handleTypeContractantChange}" />
+
+
+								<f:selectItems var="type" itemLabel="#{type.contractantTypeNom}"
+									itemValue="#{type.contractantTypeNom}"
+									value="#{moteurControllerView.contractanttypes}" />
+							</p:selectCheckboxMenu>
+
+							<p:outputLabel for="region">
+								<strong>Region</strong>
+							</p:outputLabel>
+							<p:selectCheckboxMenu multiple="true" filter="true"
+								filterMatchMode="startsWith" id="region"
+								style="width:120px;height:auto;"
+								value="#{moteurControllerView.regionStrings}">
+								<p:ajax listener="#{moteurControllerView.handleRegionChange}" />
+
+
+								<f:selectItems var="region" itemLabel="#{region.regionNom}"
+									itemValue="#{region.regionNom}"
+									value="#{moteurControllerView.regions}" />
+							</p:selectCheckboxMenu>
+
+
+							<p:outputLabel for="cercle">
+								<strong>Cercle</strong>
+							</p:outputLabel>
+							<p:selectCheckboxMenu multiple="true" filter="true"
+								filterMatchMode="startsWith" id="cercle"
+								style="width:120px;height:auto;"
+								value="#{moteurControllerView.cercleStrings}">
+								<p:ajax event="change" process="@this"></p:ajax>
+
+
+								<f:selectItems var="cercle" itemLabel="#{cercle.cerlceName}"
+									itemValue="#{cercle.cerlceName}"
+									value="#{moteurControllerView.cerclesFilter}" />
+							</p:selectCheckboxMenu>
+
+						</p:panelGrid>
+
+						<p:row>
+
+							<p:dataTable tableStyle="margin:-4px;" id="dt-projet"
+								widgetVar="dtProjet" var="projet"
+								value="#{moteurControllerView.getProjectDatas}"
+								rowKey="#{projet.projetId}" paginator="true" rows="50"
+								paginatorPosition="bottom">
+
+								<f:facet name="header">
+									<div class="products-table-header">
+										<span style="font-weight: bold">Projet</span> <span
+											class="filter-container ui-input-icon-left"> <i
+											class="pi pi-search"></i> <p:inputText id="globalFilter"
+												onkeyup="PF('dtProjet').filter()"
+												placeholder="Saisir le numero contrat ou le titre projet..." />
+										</span>
+									</div>
+								</f:facet>
+
+								<p:column headerText="N. Contrat"
+									sortBy="#{projet.projetNumContrat}"
+									filterBy="#{projet.projetNumContrat}">
+									<h:outputText value="#{projet.projetNumContrat}" />
+								</p:column>
+
+								<p:column headerText="Titre" sortBy="#{projet.projetTitre}"
+									filterBy="#{projet.projetTitre}">
+									<h:outputText value="#{projet.projetTitre}" />
+								</p:column>
+								<p:column headerText="Domaine">
+									<ui:repeat id="dt-chapitre" var="chapitre"
+										value="#{projet.chapitres}"
+										rowKey="#{chapitre.secteurHierarId}" paginator="false">
+
+										<p:column headerText="Nom" sortBy="#{chapitre.codeSecteur}">
+											<h:outputText value="#{chapitre.codeSecteur} : " />
+										</p:column>
+										<p:column headerText="Code" sortBy="#{chapitre.secteurNom}">
+											<h:outputText value="#{chapitre.secteurNom} | " />
+										</p:column>
+
+									</ui:repeat>
+								</p:column>
+								<p:column headerText="Ob. Gereraux"
+									sortBy="#{projet.projetObjectifGeneraux}"
+									filterBy="#{projet.projetObjectifGeneraux}">
+									<h:outputText value="#{projet.projetObjectifGeneraux}" />
+								</p:column>
+
+								<p:column headerText="Région">
+									<ui:repeat id="dt-region" var="region"
+										value="#{projet.regions}" rowKey="#{region.regionNom}"
+										paginator="false">
+
+
+										<p:column headerText="Code" sortBy="#{region.regionNom}">
+											<h:outputText value="#{region.regionNom} | " />
+										</p:column>
+
+									</ui:repeat>
+								</p:column>
+
+								<!-- <p:column headerText="Ob. Specifique"
+									sortBy="#{projet.projetObjectifSpecifiques}"
+									filterBy="#{projet.projetObjectifSpecifiques}">
+									<h:outputText value="#{projet.projetObjectifSpecifiques}" />
+								</p:column> -->
+
+								<p:column headerText="Status " sortBy="#{projet.status}"
+									filterBy="#{projet.status}">
+									<h:outputText value="#{projet.status}" />
+								</p:column>
+
+								<p:column headerText="Budget   ">
+									<h:outputText value="#{projet.projetBudget}">
+										<f:convertNumber type="currency" currencySymbol="€"
+											locale="fr-FR" />
+
+									</h:outputText>
+								</p:column>
+
+							</p:dataTable>
+
+						</p:row>
+
+					</div>
+				</div>
+			</div>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

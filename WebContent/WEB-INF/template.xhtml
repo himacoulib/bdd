@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" lang="en">
+
+<h:head>
+	<f:facet name="first">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="viewport"
+			content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+
+	</f:facet>
+	<meta charset="utf-8" />
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="shortcut icon"
+		href="#{request.contextPath}/resources/img/favicon.ico"
+		type="image/x-icon" />
+
+	<link href="#{request.contextPath}/resources/css/bootstrap.min.css"
+		rel="stylesheet" />
+	<link href="#{request.contextPath}/resources/css/font-awesome.min.css"
+		rel="stylesheet" />
+	<link href="#{request.contextPath}/resources/css/weather-icons.min.css"
+		rel="stylesheet" />
+
+	<link href="#{request.contextPath}/resources/css/dibaw.min.css"
+		rel="stylesheet" />
+	<link href="#{request.contextPath}/resources/css/dem.min.css"
+		rel="stylesheet" />
+	<link href="#{request.contextPath}/resources/css/typicons.min.css"
+		rel="stylesheet" />
+	<link href="#{request.contextPath}/resources/css/animate.min.css"
+		rel="stylesheet" />
+
+	<script type="text/javascript"
+		src="#{request.contextPath}/resources/js/skins.min.js"></script>
+	<title><ui:insert name="title">PrimeFaces Diamond</ui:insert></title>
+	<script  type="text/javascript"
+		src="https://maps.google.com/maps/api/js?key=AIzaSyBd63yX_m0gEvQbVWTZW6gieFFsaTQDE24"></script>
+			
+		
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/gh/emn178/chartjs-plugin-labels/src/chartjs-plugin-labels.js"></script> -->
+	
+<!-- 	
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.0.0/chartjs-plugin-datalabels.js"></script> -->
+		
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.8.0/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+		
+		
+	<!-- <script
+		src="https://unpkg.com/@googlemaps/markerclustererplus/dist/index.min.js"></script>
+ -->
+
+	<h:outputScript name="js/layout.js" library="diamond-layout" />
+	<ui:insert name="head" />
+</h:head>
+
+<h:body styleClass="#{guestPreferences.inputStyleClass}">
+	<div
+		class="layout-wrapper #{guestPreferences.layoutClass} #{guestPreferences.sidebarThemeClass}"
+		data-theme="#{guestPreferences.menuTheme}">
+
+
+		<div class="layout-content-wrapper">
+			<ui:include src="./topbar.xhtml">
+				<ui:param name="viewname" value="#{viewname}" />
+			</ui:include>
+			<div class="page-content">
+				<div class="page-breadcrumbs">
+					<ul class="breadcrumb">
+						<li><i class="fa fa-home"></i> <a href="default.aspx">Accueil</a>
+						</li>
+					</ul>
+				</div>
+
+				<div class="page-body">
+					<ui:insert name="content"></ui:insert>
+				</div>
+			</div>
+			<div class="layout-content"></div>
+			<ui:include src="./footer.xhtml"></ui:include>
+		</div>
+
+		<p:ajaxStatus styleClass="layout-ajax-loader">
+			<f:facet name="start">
+				<i class="pi pi-spin pi-spinner layout-ajax-loader-icon"
+					aria-hidden="true"></i>
+			</f:facet>
+
+			<f:facet name="complete">
+				<h:outputText value="" />
+			</f:facet>
+		</p:ajaxStatus>
+
+		<ui:include src="./search.xhtml"></ui:include>
+		<div class="layout-mask modal-in"></div>
+	</div>
+
+	<h:outputStylesheet name="css/primeflex.min.css"
+		library="diamond-layout" />
+	<h:outputStylesheet id="layout-scheme"
+		name="css/layout-#{guestPreferences.scheme}.css"
+		library="diamond-layout" />
+	<h:outputStylesheet name="css/primeicons.css" library="diamond-layout" />
+	<h:outputStylesheet name="css/demo-#{guestPreferences.scheme}.css"
+		library="demo" />
+</h:body>
+
+</html>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+		<property name="hibernate.bytecode.use_reflection_optimizer">false</property>
+		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/lastuebdd</property>
+		<property name="hibernate.connection.username">root</property>
+		<property name="hibernate.connection.password">admin</property>
+		<property name="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</property>
+		<property name="hibernate.search.autoregister_listeners">true</property>
+		<property name="hibernate.validator.apply_to_ddl">false</property>
+		<property name="hibernate.enable_lazy_load_no_trans">true</property>
+		<property name="hibernate.current_session_context_class">thread</property>
+		<property name="hibernate.show_sql">true</property>
+
+		<property name="hibernate.connection.provider_class">org.hibernate.hikaricp.internal.HikariCPConnectionProvider</property>
+		<property name="hibernate.hikari.connectionTimeout">1200000</property>
+		<property name="hibernate.hikari.minimumIdle">25</property>
+		<property name="hibernate.hikari.maximumPoolSize">50</property>
+		
+		<property name="hibernate.hikari.maxLifetime">20000</property>
+		<property name="hibernate.hikari.idleTimeout">300000</property>
+		<property name="hikari.dataSource.cachePrepStmts">true</property>
+		<property name="hikari.dataSource.prepStmtCacheSize">250</property> 
+		<property name="hikari.dataSource.prepStmtCacheSqlLimit">2048</property>
+		<property name="hikari.dataSource.useServerPrepStmts">true</property>
+		<property name="hikari.dataSource.useLocalSessionState">true</property>
+		<property name="hikari.dataSource.useLocalTransactionState">true</property>
+		<property name="hikari.dataSource.rewriteBatchedStatements">true</property>
+		<property name="hikari.dataSource.cacheResultSetMetadata">true</property>
+		<property name="hikari.dataSource.cacheServerConfiguration">true</property>
+		<property name="hikari.dataSource.elideSetAutoCommits">true</property>
+		<property name="hikari.dataSource.maintainTimeStats">false</property>
+		<property name="hikari.registerMbeans">true</property>
+
+
+		<mapping class="ml.satgrie.pl.ue.model.Pays" />
+		<mapping class="ml.satgrie.pl.ue.model.Secteur" />
+		<mapping class="ml.satgrie.pl.ue.model.Instrumentfinancement" />
+		<mapping class="ml.satgrie.pl.ue.model.Devise" />
+		<mapping class="ml.satgrie.pl.ue.model.Chapitre" />
+		<mapping class="ml.satgrie.pl.ue.model.Sourcefinancement" />
+		<mapping class="ml.satgrie.pl.ue.model.Utilisateur" />
+		<mapping class="ml.satgrie.pl.ue.model.Commune" />
+		<mapping class="ml.satgrie.pl.ue.model.Soussecteur" />
+		<mapping class="ml.satgrie.pl.ue.model.Projetchapitre" />
+		<mapping class="ml.satgrie.pl.ue.model.Profile" />
+		<mapping class="ml.satgrie.pl.ue.model.Contractanttype" />
+		<mapping class="ml.satgrie.pl.ue.model.Photo" />
+		<mapping class="ml.satgrie.pl.ue.model.Calendrier" />
+		<mapping class="ml.satgrie.pl.ue.model.Projet" />
+		<mapping class="ml.satgrie.pl.ue.model.Cercle" />
+		<mapping class="ml.satgrie.pl.ue.model.Localisation" />
+		<mapping class="ml.satgrie.pl.ue.model.Etatavancement" />
+		<mapping class="ml.satgrie.pl.ue.model.Budget" />
+		<mapping class="ml.satgrie.pl.ue.model.Pointfocal" />
+		<mapping class="ml.satgrie.pl.ue.model.Contractant" />
+		<mapping class="ml.satgrie.pl.ue.model.Region" />
+		<mapping class="ml.satgrie.pl.ue.model.Document" />
+		<mapping class="ml.satgrie.pl.ue.model.SecteurHierar" />
+		<mapping class="ml.satgrie.pl.ue.model.LocalisationSecteur" />
+	</session-factory>
+</hibernate-configuration>

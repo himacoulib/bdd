@@ -1,0 +1,17 @@
+Title: Stimulsoft.Report.Web
+Message: LE THREAD A ÉTÉ ABANDONNÉ.
+StackTrace:    à Stimulsoft.Report.Web.StiReportResponse.ResponseBuffer(Byte[] buffer, String contentType, Boolean browserCache, String fileName, Boolean saveFileDialog)
+   à Stimulsoft.Report.Web.StiReportResponse.ResponseStream(Stream stream, String contentType, Boolean browserCache, String fileName, Boolean saveFileDialog)
+   à Stimulsoft.Report.Web.StiReportResponse.ResponseAsXls(StiReport report, StiExcelExportSettings settings, Boolean saveFileDialog)
+   à Stimulsoft.Report.Web.StiReportResponse.ResponseAsXls(StiReport report, StiPagesRange pageRange)
+   à Stimulsoft.Report.Web.StiReportResponse.ResponseAsXls(StiReport report)
+   à searcheng.BtnExpExcl_Click(Object sender, EventArgs e) dans e:\SATGRIE S.A.S\SATGRIE PROJ\UE_PROJECT\Bd\web\searcheng.aspx.cs:ligne 1419
+Date/Time: 27/02/2020 17:31:05
+================================================
+Title: System.Data
+Message: IMPOSSIBLE DE TROUVER LA TABLE 0.
+StackTrace:    à System.Data.DataTableCollection.get_Item(Int32 index)
+   à EUMDLL.ClsProjet.getProjetLight(String strwhere)
+   à projets_liste.bindgrid() dans e:\SATGRIE S.A.S\SATGRIE PROJ\UE_PROJECT\Bd\web\projets-liste.aspx.cs:ligne 111
+Date/Time: 20/04/2020 14:34:56
+================================================

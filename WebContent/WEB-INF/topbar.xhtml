@@ -1,0 +1,342 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:jsf="http://xmlns.jcp.org/jsf" xmlns:p="http://primefaces.org/ui"
+	xmlns:d="http://primefaces.org/diamond">
+
+	<h:form runat="server" id="gbForm" method="post"
+		data-bv-message="This value is not valid"
+		data-bv-feedbackicons-valid="glyphicon glyphicon-ok"
+		data-bv-feedbackicons-invalid="glyphicon glyphicon-remove"
+		data-bv-submitbuttons='button[type="submit"]'
+		data-bv-feedbackicons-validating="glyphicon glyphicon-refresh">
+
+
+		<div class="navbar">
+			<div class="navbar-inner">
+				<div class="navbar-container">
+					<div class="navbar-header pull-left">
+						<a href="default.aspx" class="navbar-brand"> <small> <img
+								src="#{request.contextPath}/resources/img/logo.png" alt="" />
+						</small>
+						</a>
+					</div>
+					<div class="sidebar-collapse" id="sidebar-collapse">
+						<i class="collapse-icon fa fa-bars"></i>
+					</div>
+					<div class="navbar-header pull-right">
+						<div class="navbar-account">
+							<ul class="account-area">
+
+
+
+
+								<li><a class="login-area dropdown-toggle"
+									data-toggle="dropdown">
+										<div class="iconfa" title="View my data">
+											<i class="icon fa fa-user"></i>
+										</div>
+
+										<section>
+											<h2>
+												<span class="profile"><span>#{prenom} #{nom}</span></span>
+
+											</h2>
+										</section>
+								</a>
+									<ul
+										class="pull-right dropdown-menu dropdown-arrow dropdown-messages">
+
+										<li><p:commandLink
+												actionListener="#{loginController.modifierMdp()}"
+												class="btn  btn-sm">
+												<i class="icon fa fa-user message-avatar"
+													style="font-size: 27px;"></i>
+
+												<span> Modifier Mots de passe </span>
+
+											</p:commandLink></li>
+										<li><p:growl id="message" showDetail="true" /> <p:commandLink
+												title="Se Deconnecter"
+												action="#{loginController.doLogout()}" update="message"
+												styleClass="btn  btn-sm " icon="pi pi-sign-out"
+												style="font-size: 1.5rem">
+												<i class="icon fa fa-sign-out" style="font-size: 27px;"></i>
+												<span> Se Deconnecter </span>
+												<p:confirm header="Confirmation"
+													message="Voulez-vous vraiment quitter votre session ?"
+													icon="pi pi-exclamation-triangle" />
+											</p:commandLink> <p:confirmDialog global="true" showEffect="fade"
+												hideEffect="fade" responsive="true" width="350">
+												<p:commandButton value="No" type="button"
+													styleClass="ui-confirmdialog-no ui-button-flat" />
+												<p:commandButton value="Yes" type="button"
+													styleClass="ui-confirmdialog-yes" />
+											</p:confirmDialog></li>
+									</ul></li>
+							</ul>
+							<div class="setting">
+								<a id="btn-setting" title="Settings" href="#"> <i
+									class="icon glyphicon glyphicon-cog"></i>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="main-container container-fluid">
+
+			<div class="page-container">
+
+				<div class="page-sidebar" id="sidebar">
+					<div class="sidebar-header-wrapper">
+						<input type="text" id="searchStr" runat="server"
+							class="searchinput" /> <i class="searchicon fa fa-search"
+							onclick="__doPostBack('Search');"></i>
+						<div class="searchhelper">Saisir le numero contrat ou le
+							titre pour rechercher des projets...</div>
+					</div>
+
+					<ul class='nav sidebar-menu'>
+						<ui:fragment rendered="#{profil.dashbaord}">
+							<li runat="server" id="liDashbaord" visible="false"><a
+								href="dashboard.xhtml" class='menu-dropdown'><i
+									class="menu-icon glyphicon glyphicon-dashboard"></i><span
+									class="menu-text">DASHBOARD</span></a></li>
+						</ui:fragment>
+
+
+						<ui:fragment rendered="#{profil.moteurRecherche}">
+							<li runat="server" id="LiSearchEng" visible="false"><a
+								href="moteur.xhtml" class='menu-dropdown'><i
+									class="menu-icon fa fa-search"></i><span class="menu-text">MOTEUR
+										DE RECHERCHE</span></a></li>
+						</ui:fragment>
+						<ui:fragment rendered="#{profil.cartographie}">
+							<li runat="server" id="licart" visible="false" class="dropdown"
+								data-toggle="#cart"><a href="#" class='menu-dropdown'><i
+									class="menu-icon fa fa-map-marker"></i><span class="menu-text">CARTOGRAPHIE</span><i
+									class="menu-expand"></i></a>
+								<ul class='submenu' id="cart">
+									<li runat="server" id="liMapProjet"><a
+										href="cartographie.xhtml"><i
+											class="menu-icon glyphicon glyphicon-stats"></i><span
+											class="menu-text"> Projets </span></a></li>
+								</ul></li>
+						</ui:fragment>
+
+						<!-- <li runat="server" id="liCartographie" visible="false"
+							class="dropdown nav-item" data-toggle="#carte"><a href="#"
+							class='menu-dropdown'><i class="menu-icon fa fa-map-marker"></i><span
+								class="menu-text">CARTOGRAPHIE</span><i class="menu-expand"></i></a>
+							<ul class='dropdown-menu dropdown-list' id="carte">
+								<li runat="server" id="liCarte" class="dropdown nav-item"
+									data-toggle="#map"><a href="#" class='menu-dropdown'><i
+										class="menu-icon glyphicon glyphicon-stats"></i><span
+										class="menu-text">Cartes</span><i class="menu-expand"></i></a>
+									<ul class='submenu' id="map">
+										<li runat="server" id="liMapProjet"><a
+											href="cartographie.xhtml"><i
+												class="menu-icon glyphicon glyphicon-stats"></i><span
+												class="menu-text"> Projets </span></a></li>
+									</ul></li>
+							</ul></li> -->
+
+						<li runat="server" id="liproj" visible="false" class="dropdown"
+							data-toggle="#proj"><a href="#" class='menu-dropdown'><i
+								class="menu-icon fa fa-table"></i><span class="menu-text">Gestion
+									Projets</span><i class="menu-expand"></i></a>
+							<ul class='submenu' id="proj">
+								<ui:fragment rendered="#{profil.projets}">
+									<li runat="server" id="liListProjet"><a
+										href="projetList.xhtml"><i
+											class="menu-icon glyphicon glyphicon-list"></i><span
+											class="menu-text">Liste des projets</span></a></li>
+								</ui:fragment>
+								<ui:fragment rendered="#{profil.rapports}">
+									<li runat="server" id="liRapportDetaille"><a
+										href="rapportProjet.xhtml"><i
+											class="menu-icon glyphicon glyphicon-sort-by-attributes-alt"></i><span
+											class="menu-text">Rapports</span></a></li>
+								</ui:fragment>
+							</ul></li>
+
+						<li runat="server" id="lirap" visible="false" class="dropdown"
+							data-toggle="#Rapp"><a href="#" class='menu-dropdown'><i
+								class="menu-icon fa fa-book"></i><span class="menu-text">Sources
+									de données</span><i class="menu-expand"></i></a>
+							<ul class='submenu' id="Rapp">
+
+
+								<li runat="server" id="liRapportListeSources"><a
+									href="rapportSource.xhtml"><i
+										class="menu-icon glyphicon glyphicon-list-alt"></i><span
+										class="menu-text"> Sources </span></a></li>
+								<!-- <li runat="server" id="liRapportListeInstru"><a
+									href="rapportInstrument.xhtml"><i
+										class="menu-icon glyphicon glyphicon-list"></i><span
+										class="menu-text"> Instruments </span></a></li> -->
+								<li runat="server" id="liRapportListeChap"><a
+									href="rapportChapitre.xhtml"><i
+										class="menu-icon glyphicon glyphicon-align-justify"></i><span
+										class="menu-text"> Domaines</span></a></li>
+								<li runat="server" id="liRapportListeSect"><a
+									href="rapportSecteur.xhtml"><i
+										class="menu-icon glyphicon glyphicon-align-justify"></i><span
+										class="menu-text"> Secteurs</span></a></li>
+
+								<li runat="server" id="liRapportListeReg"><a
+									href="rapportRegion.xhtml"><i
+										class="menu-icon glyphicon glyphicon-map-marker"></i><span
+										class="menu-text">Régions</span></a></li>
+								<li runat="server" id="liRapportListeCercl"><a
+									href="rapportCercle.xhtml"><i
+										class="menu-icon glyphicon glyphicon-map-marker"></i><span
+										class="menu-text">Cercles</span></a></li>
+								<li runat="server" id="liRapportListeCom"><a
+									href="rapportCommune.xhtml"><i
+										class="menu-icon glyphicon glyphicon-map-marker"></i><span
+										class="menu-text">Communes</span></a></li>
+
+							</ul></li>
+
+
+
+						<ui:fragment rendered="#{profil.parametrage}">
+
+							<li runat="server" id="liParameter" visible="false"
+								class="dropdown" data-toggle="#param"><a href="#"
+								class='menu-dropdown'><i class="menu-icon fa fa-gears"></i><span
+									class="menu-text">PARAMETRAGE</span><i class="menu-expand"></i></a>
+								<ul class='submenu' id="param">
+									<li runat="server" id="liDevie"><a href="devise.xhtml"><i
+											class="menu-icon glyphicon glyphicon-euro"></i><span
+											class="menu-text">Devise</span></a></li>
+
+									<li runat="server" id="liFinance" class="dropdown"
+										data-toggle="#financement"><a href="#"
+										class='dropdown-item'><i class="menu-icon fa fa-database"></i><span
+											class="menu-text">Financement</span><i class="menu-expand"></i></a>
+										<ul class='submenu' id="financement">
+
+											<li runat="server" id="liSources"><a
+												href="sourcefinancement.xhtml"><i
+													class="menu-icon glyphicon glyphicon-stats"></i><span
+													class="menu-text">Sources</span></a></li>
+											<!-- <li runat="server" id="liinstruments"><a
+												href="instrument.xhtml"><i
+													class="menu-icon glyphicon glyphicon-stats"></i><span
+													class="menu-text">Instruments</span></a></li> -->
+										</ul></li>
+
+									<li runat="server" id="liIntervention" class="dropdown"
+										data-toggle="#intervention"><a href="#"
+										class='menu-dropdown'><i class="menu-icon fa fa-table"></i><span
+											class="menu-text">Intervention</span><i class="menu-expand"></i></a>
+										<ul class='submenu' id="intervention">
+											<li runat="server" id="lichapitre"><a
+												href="chapitre.xhtml"><i
+													class="menu-icon glyphicon glyphicon-stats"></i><span
+													class="menu-text">Domaines</span></a></li>
+											<li runat="server" id="lisecteurs"><a
+												href="secteur.xhtml"><i
+													class="menu-icon glyphicon glyphicon-stats"></i><span
+													class="menu-text">Secteurs</span></a></li>
+											<li runat="server" id="lisoussecteurs"><a
+												href="sousecteur.xhtml"><i
+													class="menu-icon glyphicon glyphicon-stats"></i><span
+													class="menu-text">Sous-Secteurs</span></a></li>
+										</ul></li>
+									<li runat="server" id="lilocalite" class="dropdown"
+										data-toggle="#localite"><a href="#" class='menu-dropdown'><i
+											class="menu-icon fa fa-map-marker"></i><span
+											class="menu-text">Localités</span><i class="menu-expand"></i></a>
+										<ul class='submenu' id="localite">
+											<li runat="server" id="liregions"><a href="region.xhtml"><i
+													class="menu-icon glyphicon glyphicon-map-marker"></i><span
+													class="menu-text">Région</span></a></li>
+											<li runat="server" id="licercles"><a href="cercle.xhtml"><i
+													class="menu-icon glyphicon glyphicon-map-marker"></i><span
+													class="menu-text">Cercle</span></a></li>
+											<li runat="server" id="licommunes"><a
+												href="commune.xhtml"><i
+													class="menu-icon glyphicon glyphicon-map-marker"></i><span
+													class="menu-text">Commune</span></a></li>
+										</ul></li>
+								</ul></li>
+						</ui:fragment>
+						<ui:fragment rendered="#{profil.administration}">
+							<li runat="server" id="liadmin" visible="false" class="dropdown"
+								data-toggle="#admin"><a href="#" class='menu-dropdown'><i
+									class="menu-icon fa fa-gavel"></i><span class="menu-text">ADMINISTRATION</span><i
+									class="menu-expand"></i></a>
+								<ul class='submenu' id="admin">
+									<li runat="server" id="liprproil"><a href="profil.xhtml"><i
+											class="menu-icon glyphicon glyphicon-edit"></i><span
+											class="menu-text">Profil Accès </span><i class="menu-text"></i></a>
+
+									</li>
+
+									<li runat="server" id="liuser"><a href="user.xhtml"><i
+											class="menu-icon glyphicon glyphicon-user"></i><span
+											class="menu-text">utilisateur</span><i class="menu-text"></i></a>
+
+									</li>
+								</ul></li>
+						</ui:fragment>
+
+
+
+					</ul>
+				</div>
+
+			</div>
+
+		</div>
+
+
+
+		<!--  <script type="text/javascript" src="#{request.contextPath}/resources/js/jquery-2.1.3.min.js"></script> -->
+		<script type="text/javascript"
+			src="#{request.contextPath}/resources/js/bootstrap.min.js"></script>
+		<script type="text/javascript"
+			src="#{request.contextPath}/resources/js/slimscroll/jquery.slimscroll.min.js"></script>
+
+
+		<script src="#{request.contextPath}/resources/js/dibaw.js"></script>
+		<script src="#{request.contextPath}/resources/js/bootbox.js"></script>
+		<script src="#{request.contextPath}/resources/js/doAppmin.js"></script>
+		<script src="#{request.contextPath}/resources/js/boostrapValidator.js"></script>
+		<script
+			src="#{request.contextPath}/resources/js/select2/select2.min.js"></script>
+
+		<script>
+		$('.dropdown').click(function () {
+			  var target_id = $(this).attr('data-toggle');
+			  $('.dropdown-list').not(target_id).slideUp();
+			  $(target_id).slideToggle();
+			  $('.dropdown-list').not(target_id).parents('li, .icon-tab').removeClass('active');
+			  $('.dropdown').not(this).parents(' .icon-tab').removeClass('active');
+			  $(this).parents('li, .icon-tab').toggleClass('active');
+			});
+        $(document).ready(function() 
+        {
+
+            $(gbForm)
+                        .on('init.form.bv', function(e, data) {
+                            var $gbForm = $(e.target),
+                                validator = $gbForm.data('bootstrapValidator')
+                        })
+                        .bootstrapValidator()
+                        .on('success.form.bv', function(e) { 
+                            e.preventDefault();
+                            var $gbForm = $(e.target), validator = $gbForm.data('bootstrapValidator'), submitButton = validator.getSubmitButton();
+                            $(gbForm).bootstrapValidator('defaultSubmit');
+                        });
+
+                    });                               
+    </script>
+	</h:form>
+</ui:composition>

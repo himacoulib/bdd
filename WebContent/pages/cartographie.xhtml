@@ -1,0 +1,321 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Cartographie</ui:define>
+
+
+	<ui:param name="viewname" value="Gestion Projet" />
+
+	<ui:define name="content">
+<!-- 		<script
+			src="https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"></script>
+ -->
+		<h:outputScript name="markerclusterer.js" />
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/OverlappingMarkerSpiderfier/1.0.3/oms.min.js"></script>.
+		<script type="text/javascript">
+            //<![CDATA[
+             $(document).ready(function () {
+            	 setTimeout(clusterer, 2000);
+            });
+             function clusterer() {
+                 
+                const clusterOptions = {
+                		  imagePath: "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m",
+                		  gridSize: 40,
+                		  zoomOnClick : true,
+                		  maxZoom: 10,
+                		  disableDefaultUI: true,
+                		  streetViewControl: true,
+                		  zoomControl: true,
+                		  gestureHandling: 'greedy',
+                		  zoomControlOptions: {
+							style: google.maps.ZoomControlStyle.SMALL,
+							position: google.maps.ControlPosition.RIGHT
+                		  }
+                		};
+                 var $this = PF('mapAll');
+                 if ($this) {
+                	 const markerClusterer = new MarkerClusterer($this.map, $this.cfg.markers,  clusterOptions);
+                	 
+                 }
+             }
+
+          
+             //]]>
+        </script>
+
+		<div class="p-grid ui-fluid">
+			<div class="p-col-12 p-md-12">
+
+
+				<div class="p-col-12 p-mb-12 p-lg-12 p-mb-lg-0">
+					<h5><STRONG>Cartographie des projets: Total projet:
+						#{cartographieControllerView.getProjectDatas.size() }</STRONG></h5>
+					<p:separator />
+				</div>
+				<h:form id="form"
+					rendered="#{loginController.user.profile.cartographie == true}">
+
+					<div class="col-md-4" style="text-align: center">
+						<p:commandButton value="Filtrer" icon="pi pi-search"
+							process="@this" styleClass="success-button"
+							action="#{cartographieControllerView.filteredProject}" />
+						&#160;&#160;
+						<p:commandButton class="col-md-4" styleClass="danger-button"
+							value="Reinitialiser" icon="pi pi-trash" process="@this"
+							action="#{cartographieControllerView.reinitialiserFiltre()}" />
+						&#160;&#160;
+
+					</div>
+					<p:panelGrid id="cartoSearchTab" columns="6" style="margin: 0px">
+
+						<p:outputLabel for="source">
+							<strong>Source: </strong>
+						</p:outputLabel>
+						<p:selectCheckboxMenu multiple="true" filter="true"
+							filterMatchMode="startsWith" id="source" style="width:200px"
+							value="#{cartographieControllerView.sourceStrings}">
+							<p:ajax
+								listener="#{cartographieControllerView.handleSourceChange}" />
+
+							<f:selectItems var="source"
+								itemLabel="#{source.sourceFinancementNom}"
+								itemValue="#{source.sourceFinancementNom}"
+								value="#{cartographieControllerView.sources}" />
+						</p:selectCheckboxMenu>
+
+						<p:outputLabel for="domaine">
+							<strong>Domaine</strong>
+						</p:outputLabel>
+						<p:selectCheckboxMenu multiple="true" filter="true"
+							filterMatchMode="startsWith" id="domaine"
+							style="width:120px;height:auto;"
+							value="#{cartographieControllerView.chapitreStrings}">
+							<p:ajax event="change" process="@this"></p:ajax>
+
+
+							<f:selectItems var="chapitre"
+								itemLabel="#{chapitre.chapitreName}"
+								itemValue="#{chapitre.chapitreName}"
+								value="#{cartographieControllerView.chapitres}" />
+						</p:selectCheckboxMenu>
+
+						<p:outputLabel for="secteur">
+							<strong>Secteur</strong>
+						</p:outputLabel>
+						<p:selectCheckboxMenu multiple="true" filter="true"
+							filterMatchMode="startsWith" id="secteur"
+							style="width:120px;height:auto;"
+							value="#{cartographieControllerView.secteurStrings}">
+							<p:ajax event="change" process="@this"></p:ajax>
+
+
+							<f:selectItems var="secteur" itemLabel="#{secteur.secteurName}"
+								itemValue="#{secteur.secteurName}"
+								value="#{cartographieControllerView.secteurs}" />
+						</p:selectCheckboxMenu>
+						<p:outputLabel for="typecontractant">
+							<strong>Type contractant</strong>
+						</p:outputLabel>
+						<p:selectCheckboxMenu multiple="true" filter="true"
+							filterMatchMode="startsWith" id="typecontractant"
+							style="width:120px;height:auto;"
+							value="#{cartographieControllerView.contractanttypeStrings}">
+							<p:ajax
+								listener="#{cartographieControllerView.handleTypeContractantChange}" />
+
+
+							<f:selectItems var="type" itemLabel="#{type.contractantTypeNom}"
+								itemValue="#{type.contractantTypeNom}"
+								value="#{cartographieControllerView.contractanttypes}" />
+						</p:selectCheckboxMenu>
+		
+
+						<p:outputLabel for="contractant">
+							<strong>Contractant</strong>
+						</p:outputLabel>
+						<p:selectCheckboxMenu multiple="true" filter="true"
+							filterMatchMode="startsWith" id="contractant"
+							style="width:120px;height:auto;"
+							value="#{cartographieControllerView.contractantStrings}">
+							<p:ajax event="change" process="@this"></p:ajax>
+
+
+							<f:selectItems var="contractant"
+								itemLabel="#{contractant.contractantNom}"
+								itemValue="#{contractant.contractantNom}"
+								value="#{cartographieControllerView.contractantsFilter}" />
+						</p:selectCheckboxMenu>
+
+						<p:outputLabel >
+						</p:outputLabel>
+						<p:outputLabel >
+						</p:outputLabel>
+						<p:outputLabel for="region">
+							<strong>Region</strong>
+						</p:outputLabel>
+						<p:selectCheckboxMenu multiple="true" filter="true"
+							filterMatchMode="startsWith" id="region"
+							style="width:120px;height:auto;"
+							value="#{cartographieControllerView.regionStrings}">
+							<p:ajax
+								listener="#{cartographieControllerView.handleRegionChange}" />
+
+
+							<f:selectItems var="region" itemLabel="#{region.regionNom}"
+								itemValue="#{region.regionNom}"
+								value="#{cartographieControllerView.regions}" />
+						</p:selectCheckboxMenu>
+
+
+						<p:outputLabel for="cercle">
+							<strong>Cercle</strong>
+						</p:outputLabel>
+						<p:selectCheckboxMenu multiple="true" filter="true"
+							filterMatchMode="startsWith" id="cercle"
+							style="width:120px;height:auto;"
+							value="#{cartographieControllerView.cercleStrings}">
+							<p:ajax
+								listener="#{cartographieControllerView.handleCercleChange}" />
+							
+							<!-- <p:ajax event="change" process="@this"></p:ajax> -->
+
+
+							<f:selectItems var="cercle" itemLabel="#{cercle.cerlceName}"
+								itemValue="#{cercle.cerlceName}"
+								value="#{cartographieControllerView.cerclesFilter}" />
+						</p:selectCheckboxMenu>
+						
+						<p:outputLabel for="commune">
+							<strong>Commune</strong>
+						</p:outputLabel>
+						<p:selectCheckboxMenu multiple="true" filter="true"
+							filterMatchMode="startsWith" id="commune"
+							style="width:120px;height:auto;"
+							value="#{cartographieControllerView.communeStrings}">
+							<p:ajax event="change" process="@this"></p:ajax> 
+
+							<f:selectItems var="commune" itemLabel="#{commune.communeNom}"
+								itemValue="#{commune.communeNom}"
+								value="#{cartographieControllerView.communesFilter}" />
+						</p:selectCheckboxMenu>
+
+					</p:panelGrid>
+
+					<div class="card">
+
+						<p:gmap id="carte" process="@this" type="HYBRID"
+							widgetVar="mapAll" disableDefaultUI="true" mapTypeControl="true"
+							navigationControl="true" fitBounds="true"  center="12.64467, -8.03551" zoom="6"
+							style="width:100%;height:600px"
+							model="#{cartographieControllerView.simpleModel}"> 
+							<p:ajax event="overlaySelect"
+									listener="#{cartographieControllerView.onMarkerSelect}" />
+							<p:gmapInfoWindow id="infoWindow">
+
+									<div style="height: 500px">
+										<h:form>
+
+											<p:tabView orientation="left">
+												<p:tab title="Info Projet">
+													<p:panelGrid columns="2">
+
+														<h:outputText value="Numéro de contrat" />
+														<h:outputText
+															value="#{cartographieControllerView.gmapProjectData.projetNumContrat}" />
+
+														<h:outputText value="Titre:" />
+														<h:outputText
+															value="#{cartographieControllerView.gmapProjectData.projetTitre}" />
+
+														<h:outputText value="Description" />
+														<h:outputText
+															value="#{cartographieControllerView.gmapProjectData.projetDescription}" />
+
+														<h:outputText value="Objectif Généraux" />
+														<h:outputText
+															value="#{cartographieControllerView.gmapProjectData.projetObjectifGeneraux}" />
+
+														<h:outputText value="Objectif Spécifiques" />
+														<h:outputText
+															value="#{cartographieControllerView.gmapProjectData.projetObjectifSpecifiques}" />
+
+
+														<h:outputText value="Objectif Spécifiques" />
+														<h:outputText
+															value="#{cartographieControllerView.gmapProjectData.projetResultatsPrevus}" />
+
+													</p:panelGrid>
+												</p:tab>
+												<p:tab title="Domaines">
+													<h:panelGrid columns="2" cellpadding="10">
+														<p:dataTable var="chap" id="gmapCart"
+															value="#{cartographieControllerView.gmapProjectData.chapitres}">
+
+
+															<p:column headerText="Code DAC">
+																<h:outputText value="#{chap.codeSecteur}" />
+															</p:column>
+															<p:column headerText="Nom">
+																<h:outputText value="#{chap.secteurNom}" />
+															</p:column>
+
+														</p:dataTable>
+													</h:panelGrid>
+												</p:tab>
+
+												<p:tab title="Secteurs">
+													<h:panelGrid columns="2" cellpadding="10">
+														<p:dataTable var="chap" id="gmapCartSect"
+															value="#{cartographieControllerView.gmapProjectData.projetSecteurs}">
+
+
+															<p:column headerText="Code DAC">
+																<h:outputText value="#{chap.codeSecteur}" />
+															</p:column>
+															<p:column headerText="Nom">
+																<h:outputText value="#{chap.secteurNom}" />
+															</p:column>
+
+														</p:dataTable>
+													</h:panelGrid>
+												</p:tab>
+
+												<p:tab title="Financement">
+													<h:panelGrid columns="2" cellpadding="10">
+														<p:dataTable var="chap" id="gmapCartFin"
+															value="#{cartographieControllerView.gmapProjectData.budgets}">
+
+
+															<p:column headerText="Source de financement">
+																<h:outputText value="#{chap.instrumentfinancement.sourcefinancement.sourceFinancementNom}" />
+															</p:column>
+															<p:column headerText="Budget Total">
+																<h:outputText value="#{cartographieControllerView.gmapProjectData.projetBudget}" />
+															</p:column>
+
+														</p:dataTable>
+														
+													</h:panelGrid>
+												</p:tab>
+											</p:tabView>
+										</h:form>
+									</div>
+
+								</p:gmapInfoWindow>
+								
+						</p:gmap>
+
+					</div>
+				</h:form>
+
+
+			</div>
+		</div>
+		
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,50 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title"> Galeries d'images des projets</ui:define>
+                
+    <ui:param name="viewname" value=" Galeries d'images des projets" />
+
+    <ui:define name="content">
+        <div class="p-grid list-demo">
+            <div class="p-col-12">
+                <div class="card">
+                   
+                    <p:dataView var="photo" value="#{gallerieControllerView.photos}" gridIcon="pi pi-th-large" listIcon="pi pi-bars"
+                        paginator="true" rows="10" layout="grid" paginatorPosition="bottom"
+                        rendered="#{loginController.user.profile.media == true}">
+                        <p:dataViewGridItem>
+                            <div class="product-grid-item card">
+                                
+                                <div class="product-grid-item-content">
+                                    <p:graphicImage name="images/avatar/DUE.png" library="demo" />
+                                    <div class="product-name">Contrat N° : #{photo.projet.projetNumContrat}</div>
+                                    <div class="product-description">#{photo.projet.projetTitre}</div>
+                                </div>
+                                
+                            </div>
+                        </p:dataViewGridItem>
+                
+                        <p:dataViewListItem>
+                            <div class="product-list-item">
+                                <p:graphicImage  name="images/avatar/DUE.png" library="demo" />
+                                <div class="product-list-detail">
+                                    <div class="product-name">Contrat N° : #{photo.projet.projetNumContrat}</div>
+                                    <div class="product-description">#{photo.projet.projetTitre}</div>
+                                </div>
+                               
+                            </div>
+                        </p:dataViewListItem>
+                    </p:dataView>
+                </div>
+            </div>
+
+            
+        </div>
+    </ui:define>
+
+</ui:composition>

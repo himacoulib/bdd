@@ -1,0 +1,209 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Gestion Sous Secteur</ui:define>
+
+	<ui:param name="viewname" value="Gestion sous secteur" />
+
+	<ui:define name="content">
+		<h:form id="form"
+			rendered="#{loginController.user.profile.parametrage == true}">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<p:growl id="messages" showDetail="true" />
+						<p:toolbar>
+							<p:toolbarGroup>
+								<p:commandButton value="Nouveau" icon="pi pi-plus"
+									actionListener="#{soussecteurControllerView.openNew}"
+									update="manage-product-content"
+									oncomplete="PF('manageSousSecteurDialog').show()"
+									styleClass="success-button" style="margin-right: .5rem" />
+
+							</p:toolbarGroup>
+							<p:toolbarGroup align="right">
+								<p:commandButton value="Export" icon="pi pi-upload"
+									styleClass="help-button" ajax="false">
+									<p:dataExporter type="pdf" target="dt-soussecteurs"
+										fileName="Sous-secteurs" />
+								</p:commandButton>
+							</p:toolbarGroup>
+						</p:toolbar>
+
+
+						<p:dataTable id="dt-soussecteurs" widgetVar="dtSousSecteurs"
+							var="soussecteur"
+							value="#{soussecteurControllerView.soussecteurs}" reflow="true"
+							styleClass="products-table" selectionMode="single"
+							selection="#{soussecteurControllerView.selectedSousSecteur}"
+							rowKey="#{soussecteur.id}" paginator="true" rows="50"
+							rowSelectMode="add" paginatorPosition="bottom">
+							<f:facet name="header">
+								<div class="products-table-header">
+									<span style="font-weight: bold">Sous secteurs</span> <span
+										class="filter-container ui-input-icon-left"> <i
+										class="pi pi-search"></i> <p:inputText id="globalFilter"
+											onkeyup="PF('dtSousSecteurs').filter()" placeholder="Search" />
+									</span>
+								</div>
+							</f:facet>
+
+							<p:column headerText="Nom"
+								sortBy="#{soussecteur.sousSecteurName}"
+								filterBy="#{soussecteur.sousSecteurName}">
+								<h:outputText value="#{soussecteur.sousSecteurName}" />
+							</p:column>
+
+							<p:column exportable="false">
+
+							</p:column>
+
+
+							<p:column headerText="Code"
+								sortBy="#{soussecteur.sousSecteurCode}"
+								filterBy="#{soussecteur.sousSecteurCode}">
+								<h:outputText value="#{soussecteur.sousSecteurCode}" />
+							</p:column>
+
+							<p:column headerText="Description"
+								sortBy="#{soussecteur.sousSecteurDescrip}"
+								filterBy="#{soussecteur.sousSecteurDescrip}">
+								<h:outputText value="#{soussecteur.sousSecteurDescrip}" />
+							</p:column>
+							
+							
+							
+							
+
+							<p:column exportable="false" headerText="Action">
+								<p:commandButton icon="pi pi-pencil"
+									update=":form:manage-product-content"
+									oncomplete="PF('manageSousSecteurDialog').show()"
+									styleClass="edit-button rounded-button success-button"
+									process="@this">
+									<f:setPropertyActionListener value="#{soussecteur}"
+										target="#{soussecteurControllerView.selectedSousSecteur}" />
+								</p:commandButton>
+								<p:commandButton class="warning-button rounded-button"
+									icon="pi pi-trash" process="@this"
+									action="#{soussecteurControllerView.deleteSousSecteur()}">
+									<p:confirm header="Confirmation" message="Etes vous sure ?"
+										icon="pi pi-info-circle" />
+									<f:setPropertyActionListener value="#{soussecteur}"
+										target="#{soussecteurControllerView.selectedSousSecteur}" />
+								</p:commandButton>
+							</p:column>
+
+
+						</p:dataTable>
+
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+							responsive="true" width="350">
+							<p:commandButton value="Non" type="button"
+								styleClass="ui-confirmdialog-no ui-button-flat" />
+							<p:commandButton value="Oui" type="button"
+								styleClass="ui-confirmdialog-yes" />
+						</p:confirmDialog>
+						<p:dialog header="Sous secteur" width="450" showEffect="fade"
+							modal="true" widgetVar="manageSousSecteurDialog"
+							responsive="true">
+							<p:outputPanel id="manage-product-content" class="ui-fluid">
+								<p:outputPanel
+									rendered="#{not empty soussecteurControllerView.selectedSousSecteur}">
+									<div class="p-field">
+										<p:outputLabel for="name">Nom</p:outputLabel>
+
+										<p:inputText id="name"
+											value="#{soussecteurControllerView.selectedSousSecteur.sousSecteurName}" />
+
+										<p:inputText id="chapitreID" type="hidden"
+											value="#{soussecteurControllerView.selectedSousSecteur.id.chapitreId}"
+											required="true" />
+										<p:inputText id="secteurID" type="hidden"
+											value="#{soussecteurControllerView.selectedSousSecteur.id.secteurId}"
+											required="true" />
+										
+										<p:inputText id="sousecteurID" type="hidden"
+											value="#{soussecteurControllerView.selectedSousSecteur.id.sousSecteurId}"
+											required="true" />
+									</div>
+
+									<div class="p-field">
+										<p:outputLabel for="code">Code</p:outputLabel>
+										<p:inputText id="code"
+											value="#{soussecteurControllerView.selectedSousSecteur.sousSecteurCode}" />
+									</div>
+									<div class="p-field">
+										<p:outputLabel for="descr">Description</p:outputLabel>
+										<p:inputText id="descr"
+											value="#{soussecteurControllerView.selectedSousSecteur.sousSecteurDescrip}" />
+									</div>
+									<div class="p-field">
+										<p:outputLabel for="chapitre"
+											rendered="#{soussecteurControllerView.editSelected == false}">Chapitre</p:outputLabel>
+										<p:selectOneMenu id="chapitre"
+											rendered="#{soussecteurControllerView.editSelected == false}"
+											value="#{soussecteurControllerView.selectedChapitreString}">
+											<f:selectItem itemLabel="Selectionner une chapitre" />
+											<f:selectItems var="chap" itemLabel="#{chap.chapitreName}"
+												itemValue="#{chap.chapitreName}"
+												value="#{soussecteurControllerView.chapitres}" />
+										</p:selectOneMenu>
+									</div>
+									<div class="p-field">
+										<p:outputLabel for="secteur"
+											rendered="#{soussecteurControllerView.editSelected == false}">Secteur</p:outputLabel>
+										<p:selectOneMenu id="secteur"
+											rendered="#{soussecteurControllerView.editSelected == false}"
+											value="#{soussecteurControllerView.selectedSecteurString}">
+											<f:selectItem itemLabel="Selectionner un secteur" />
+											<f:selectItems var="sec" itemLabel="#{sec.secteurName}"
+												itemValue="#{sec.secteurName}"
+												value="#{soussecteurControllerView.secteurs}" />
+										</p:selectOneMenu>
+									</div>
+
+								</p:outputPanel>
+							</p:outputPanel>
+
+							<f:facet name="footer">
+								<p:commandButton value="Save" icon="pi pi-check"
+									actionListener="#{soussecteurControllerView.saveSousSecteur()}"
+									update="manage-product-content"
+									process="manage-product-content @this">
+								</p:commandButton>
+								<p:commandButton value="Cancel" icon="pi pi-times"
+									onclick="PF('manageSousSecteurDialog').hide()"
+									class="secondary-button" />
+							</f:facet>
+						</p:dialog>
+
+						<p:confirmDialog widgetVar="deleteSousSecteurDialog" showEffect="fade"
+							width="300" message="Supprimer le cercle ?" header="Confirm"
+							severity="warn">
+							<p:commandButton value="Oui" icon="pi pi-check"
+								actionListener="#{soussecteurControllerView.deleteSousSecteur()}"
+								process="@this" oncomplete="PF('deleteSousSecteurDialog').hide()" />
+							<p:commandButton value="Non" type="button"
+								styleClass="secondary-button" icon="pi pi-times"
+								onclick="PF('deleteSousSecteurDialog').hide()" />
+						</p:confirmDialog>
+
+						<p:confirmDialog global="true" showEffect="fade" width="300">
+							<p:commandButton value="Oui" type="button"
+								styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+							<p:commandButton value="Non" type="button"
+								styleClass="ui-confirmdialog-no secondary-button"
+								icon="pi pi-times" />
+						</p:confirmDialog>
+					</div>
+				</div>
+			</div>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

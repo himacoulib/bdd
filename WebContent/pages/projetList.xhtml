@@ -1,0 +1,154 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Gestion Projet</ui:define>
+
+	<ui:param name="viewname" value="Gestion Projet" />
+
+	<ui:define name="content">
+
+		<h:form id="form"
+			rendered="#{profil.projets eq true}">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<p:growl id="messages" showDetail="true" />
+
+						<div class="products-buttonbar">
+							<div>
+								<p:commandButton action="#{projetListControllerView.change}"
+									value="CREER" icon="pi pi-plus" styleClass="success-button"
+									style="margin-right: .5rem" />
+							</div>
+							<div>
+
+								<!-- <p:commandButton value="Exporter en PDF" icon="pi pi-upload"
+									styleClass="help-button" ajax="false">
+									<p:dataExporter type="pdf" target="dt-projet" fileName="projet" />
+								</p:commandButton>
+								&#160;&#160;
+								<p:commandButton value="Exporter en Excel" icon="pi pi-upload"
+									styleClass="success-button" ajax="false">
+									<p:dataExporter type="xls" target="dt-projet" fileName="projet" />
+								</p:commandButton> -->
+							</div>
+						</div>
+
+						<p:dataTable id="dt-projet" widgetVar="dtProjet" var="projet"
+							value="#{projetListControllerView.getProjectDatas}" reflow="true"
+							styleClass="products-table" selectionMode="single"
+							rowKey="#{projet.projetId}" paginator="true" rows="40"
+							paginatorPosition="bottom">
+
+							<f:facet name="header">
+								<!-- <div class="products-table-header">
+									<span style="font-weight: bold">Liste des projets</span> <span
+										class="filter-container ui-input-icon-left"> <i
+										class="pi pi-search"></i> <p:inputText id="globalFilter"
+											onkeyup="PF('dtProjet').filter()" placeholder="Search" />
+									</span>
+								</div> -->
+
+								<div class="p-grid crud-demo">
+									<div class="p-col-12">
+										<div class="card  p-field p-col-12 p-md-12">
+											<p:panelGrid id="searchAutoTab" columns="3" style="margin: 0px">
+												<ui:fragment>
+													<p:autoComplete id="countries" placeholder="Num. Contrat"
+														value="#{projetListControllerView.selectedAutoProjets}"
+														completeMethod="#{projetListControllerView.completeNumContrat}"
+														scrollHeight="250" style="width:220px">
+
+														<p:ajax event="itemSelect"
+															listener="#{projetListControllerView.onItemNumContratSelect}" />
+													</p:autoComplete>
+												</ui:fragment>
+
+												<ui:fragment>
+													<p:autoComplete id="lob" placeholder="Recherche Global"
+														value="#{projetListControllerView.selectedAutoGlobalProjets}"
+														completeMethod="#{projetListControllerView.completeTitleGlobal}"
+														scrollHeight="250" style="width:220px">
+
+														<p:ajax event="itemSelect"
+															listener="#{projetListControllerView.onItemTitleGlobalSelect}" />
+													</p:autoComplete>
+
+												</ui:fragment>
+											</p:panelGrid>
+										</div>
+									</div>
+								</div>
+							</f:facet>
+							<p:column headerText="id" rendered="false"
+								sortBy="#{projet.projetId}" filterBy="#{projet.projetId}">
+								<h:outputText value="#{projet.projetId}" />
+							</p:column>
+
+							<p:column headerText="Numero contrat"
+								sortBy="#{projet.projetNumContrat}"
+								filterBy="#{projet.projetNumContrat}">
+								<h:outputText value="#{projet.projetNumContrat}" />
+							</p:column>
+
+							<p:column exportable="false">
+
+							</p:column>
+
+							<p:column headerText="Titre" sortBy="#{projet.projetTitre}"
+								filterBy="#{projet.projetTitre}">
+								<h:outputText value="#{projet.projetTitre} " />
+							</p:column>
+
+
+							<p:column headerText="Budget   ">
+								<h:outputText value="#{projet.projetBudget}">
+									<f:convertNumber type="currency" currencySymbol="€"
+										locale="fr-FR" />
+
+								</h:outputText>
+							</p:column>
+							<p:column exportable="false" headerText="Action">
+								<p:commandButton id="upProjet" icon="pi pi-pencil"
+									title="Modifier" action="projetForm?faces-redirect=true"
+									styleClass="edit-button rounded-button success-button">
+									<f:setPropertyActionListener value="#{projet}"
+										target="#{projetListControllerView.selectedProjet}" />
+								</p:commandButton>
+
+							</p:column>
+
+
+						</p:dataTable>
+
+						<p:confirmDialog widgetVar="deleteProjetDialog" showEffect="fade"
+							width="300"
+							message="Supprimer le projet et tous ses composants ?"
+							header="Confirm" severity="warn">
+							<p:commandButton value="Oui" icon="pi pi-check"
+								actionListener="#{projetControllerView.deleteSelectedProjet()}"
+								process="@this" oncomplete="PF('deleteProjetDialog').hide()" />
+							<p:commandButton value="Non" type="button"
+								styleClass="secondary-button" icon="pi pi-times"
+								onclick="PF('deleteProjetDialog').hide()" />
+						</p:confirmDialog>
+
+						<p:confirmDialog global="true" showEffect="fade" width="300">
+							<p:commandButton value="Oui" type="button"
+								styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+							<p:commandButton value="Non" type="button"
+								styleClass="ui-confirmdialog-no secondary-button"
+								icon="pi pi-times" />
+						</p:confirmDialog>
+
+					</div>
+				</div>
+			</div>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,208 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Gestion Profiles</ui:define>
+
+	<ui:param name="viewname" value="Gestion Profil" />
+
+	<ui:define name="content">
+		<h:form id="form" rendered="#{loginController.user.profile.administration == true}">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<p:growl id="messages" showDetail="true" />
+
+						<div class="products-buttonbar">
+							<div>
+								<p:commandButton value="Nouveau" icon="pi pi-plus"
+									actionListener="#{profilControllerView.openNew}"
+									update="manage-product-content"
+									oncomplete="PF('manageProfilDialog').show()"
+									styleClass="success-button" style="margin-right: .5rem" />
+								
+							</div>
+							
+						</div>
+
+						<p:dataTable id="dt-users" widgetVar="dtProfil" var="profil"
+							value="#{profilControllerView.profils}" reflow="true"
+							styleClass="products-table" selectionMode="single"
+							selection="#{profilControllerView.selectedProfil}"
+							rowKey="#{profil.profileId}" paginator="true" rows="50"
+							rowSelectMode="add" paginatorPosition="bottom">
+							<f:facet name="header">
+								<div class="products-table-header">
+									<span style="font-weight: bold">Profil </span> <span
+										class="filter-container ui-input-icon-left"> <i
+										class="pi pi-search"></i> <p:inputText id="globalFilter"
+											onkeyup="PF('dtProfil').filter()" placeholder="Search" />
+									</span>
+								</div>
+							</f:facet>
+
+							
+							
+							<p:column headerText="Nom" sortBy="#{profil.profileNom}"
+								filterBy="#{profil.profileNom}">
+								<h:outputText value="#{profil.profileNom}" />
+							</p:column>
+							<p:column exportable="false">
+								
+							</p:column>
+							<p:column headerText="Description" sortBy="#{profil.profilDesc}"
+								filterBy="#{profil.profilDesc}">
+								<h:outputText value="#{profil.profilDesc}" />
+							</p:column>
+
+
+							<p:column exportable="false" headerText="Action">
+								<p:commandButton icon="pi pi-pencil"
+									update=":form:manage-product-content"
+									oncomplete="PF('manageProfilDialog').show()"
+									styleClass="edit-button rounded-button success-button"
+									process="@this">
+									<f:setPropertyActionListener value="#{profil}"
+										target="#{profilControllerView.selectedProfil}" />
+								</p:commandButton>
+								<p:commandButton class="warning-button rounded-button"
+									icon="pi pi-trash" process="@this"
+									oncomplete="PF('deleteProfilDialog').show()">
+<p:confirm header="Confirmation" message="Etes vous sure ?"
+							icon="pi pi-info-circle" />
+									<f:setPropertyActionListener value="#{profil}"
+										target="#{profilControllerView.selectedProfil}" />
+								</p:commandButton>
+							</p:column>
+
+
+						</p:dataTable>
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+							responsive="true" width="350">
+							<p:commandButton value="Non" type="button"
+								styleClass="ui-confirmdialog-no ui-button-flat" />
+							<p:commandButton value="Oui" type="button"
+								styleClass="ui-confirmdialog-yes" />
+						</p:confirmDialog>
+						<p:dialog header="Profile" width="450" showEffect="fade"
+							modal="true" widgetVar="manageProfilDialog" responsive="true">
+							<p:outputPanel id="manage-product-content" class="ui-fluid">
+								<p:outputPanel
+									rendered="#{not empty profilControllerView.selectedProfil}">
+
+									<div class="p-field">
+										<p:outputLabel for="name">Nom</p:outputLabel>
+										<p:inputText id="name"
+											value="#{profilControllerView.selectedProfil.profileNom}"
+											required="true" />
+											<p:inputText id="profileId" type="hidden"
+											value="#{profilControllerView.selectedProfil.profileId}"
+											required="true" />
+									</div>
+
+									<div class="p-field">
+										<p:outputLabel for="descrip">Description</p:outputLabel>
+										<p:inputText id="descrip"
+											value="#{profilControllerView.selectedProfil.profilDesc}"
+											required="true" />
+									</div>
+									<div class="card">
+										<h5>Responsive (Basic)</h5>
+										<p:panelGrid columns="9" layout="grid"
+											styleClass="showcase-text-align-center">
+											<p:outputLabel for="admin">Administration</p:outputLabel>
+											<p:selectBooleanCheckbox itemLabel="" id="admin"
+											 value="#{profilControllerView.selectedProfil.administration}" />
+											<p:outputLabel for="rapport">Rapport</p:outputLabel>
+											<p:selectBooleanCheckbox id="rapport" itemLabel=""
+												value="#{profilControllerView.selectedProfil.rapports}" />
+
+
+										</p:panelGrid>
+										<p:panelGrid columns="9" layout="grid"
+											styleClass="showcase-text-align-center">
+											<p:outputLabel for="projet">Projet</p:outputLabel>
+											<p:selectBooleanCheckbox itemLabel="" id="projet"
+												value="#{profilControllerView.selectedProfil.projets}" />
+											<p:outputLabel for="media">Media</p:outputLabel>
+											<p:selectBooleanCheckbox itemLabel="" id="media"
+												value="#{profilControllerView.selectedProfil.media}" />
+										</p:panelGrid>
+										<p:panelGrid columns="9" layout="grid"
+											styleClass="showcase-text-align-center">
+											<p:outputLabel for="dashboard">Dashboard</p:outputLabel>
+											<p:selectBooleanCheckbox itemLabel="" id="dashboard"
+												value="#{profilControllerView.selectedProfil.dashbaord}" />
+
+											<p:outputLabel for="parametrage">Parametrage</p:outputLabel>
+											<p:selectBooleanCheckbox itemLabel="" id="parametrage"
+												value="#{profilControllerView.selectedProfil.parametrage}" />
+
+										</p:panelGrid>
+										<p:panelGrid columns="9" layout="grid"
+											styleClass="showcase-text-align-center">
+											<p:outputLabel for="calendrier">Calendrier</p:outputLabel>
+											<p:selectBooleanCheckbox itemLabel="" id="calendrier"
+												value="#{profilControllerView.selectedProfil.calendrier}" />
+											<p:outputLabel for="moteur">Moteur de recherche</p:outputLabel>
+											<p:selectBooleanCheckbox itemLabel="Moteur" id="moteur"
+												value="#{profilControllerView.selectedProfil.moteurRecherche}" />
+
+										</p:panelGrid>
+										<p:panelGrid columns="9" layout="grid"
+											styleClass="showcase-text-align-center">
+											<p:outputLabel for="carto">Cartographie</p:outputLabel>
+											<p:selectBooleanCheckbox id="carto" itemLabel=""
+												value="#{profilControllerView.selectedProfil.cartographie}" />
+											<p:outputLabel for="manuel">User Manuel</p:outputLabel>
+											<p:selectBooleanCheckbox id="manuel" itemLabel=""
+												value="#{profilControllerView.selectedProfil.userManual}" />
+
+										</p:panelGrid>
+
+									</div>
+
+
+								</p:outputPanel>
+							</p:outputPanel>
+
+							<f:facet name="footer">
+								<p:commandButton value="Save" icon="pi pi-check"
+									actionListener="#{profilControllerView.saveProfil()}"
+									update="manage-product-content"
+									process="manage-product-content @this" />
+								<p:commandButton value="Cancel" icon="pi pi-times"
+									onclick="PF('manageProfilDialog').hide()"
+									class="secondary-button" />
+							</f:facet>
+						</p:dialog>
+
+						<p:confirmDialog widgetVar="deleteProfilDialog" showEffect="fade"
+							width="300" message="Supprimer le profil ?" header="Confirm"
+							severity="warn">
+							<p:commandButton value="Oui" icon="pi pi-check"
+								actionListener="#{profilControllerView.deleteSelectedProfil()}"
+								process="@this" oncomplete="PF('deleteProfilDialog').hide()" />
+							<p:commandButton value="Non" type="button"
+								styleClass="secondary-button" icon="pi pi-times"
+								onclick="PF('deleteProfilDialog').hide()" />
+						</p:confirmDialog>
+
+						<p:confirmDialog global="true" showEffect="fade" width="300">
+							<p:commandButton value="Oui" type="button"
+								styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+							<p:commandButton value="Non" type="button"
+								styleClass="ui-confirmdialog-no secondary-button"
+								icon="pi pi-times" />
+						</p:confirmDialog>
+
+					</div>
+				</div>
+			</div>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

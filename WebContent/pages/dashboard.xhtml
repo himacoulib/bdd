@@ -1,0 +1,345 @@
+﻿<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Dashboard</ui:define>
+
+	<ui:param name="viewname" value="DASHBOARD" />
+
+	<ui:define name="head">
+
+		<h:outputScript target="head">
+
+	
+			
+		   function pieExtender() {
+		   		setTimeout(pieTest, 1000);
+		    };
+		    
+		    function pieTest(){
+		    
+						var data = PF("regPie").cfg.config.data;
+				        var ctx = document.getElementById("pie-chart");
+					    var myChart = new Chart(ctx, {
+					        type: 'doughnut',
+					        data: data,
+					         plugins: [ChartDataLabels],
+					        options: {
+							        cutout: "70%", 
+								    animationEasing: "easeOutBounce",
+								
+								    animateRotate: true,
+								
+								    animateScale: false,
+																      responsive: true,
+								      maintainAspectRatio: true,
+								      plugins: {
+								         datalabels: {
+									      formatter: (value, ctx) => {
+											  
+							                let sum = 0;
+							                let dataArr = ctx.chart.data.datasets[0].data;
+							                dataArr.map(data => {
+							                    sum += data;
+							                });
+							                let percentage = (value*100 / sum).toFixed(0)+"%";
+							                return percentage;
+
+									      },
+									      color: "#000000",
+									        align: 'center',
+									        backgroundColor: 'white',
+									        borderRadius: 50,
+									        padding:5,
+									        font: {
+									          size: 12,
+									        }
+						    			},
+						    			legend: {
+						        labels: {
+						          usePointStyle: true,
+						        },
+						      }
+								      },
+								    }
+					    }); 
+					    
+					document.getElementById("j_idt26:region").style.height="0px";
+		    }
+		    
+		     function pieConTest(){
+		    
+						var data = PF("contPie").cfg.config.data;
+				        var ctx = document.getElementById("pieCont-chart");
+					    var myChart = new Chart(ctx, {
+					        type: 'doughnut',
+					        data: data,
+					         plugins: [ChartDataLabels],
+					        options: {
+							        cutout: "20%",
+								      responsive: true,
+								      maintainAspectRatio: true,
+								      plugins: {
+								         datalabels: {
+									      formatter: (value, ctx) => {
+											  
+							                let sum = 0;
+							                let dataArr = ctx.chart.data.datasets[0].data;
+							                dataArr.map(data => {
+							                    sum += data;
+							                });
+							                let percentage = (value*100 / sum).toFixed(0)+"%";
+							                return percentage;
+
+									      },
+									      color: "#000000",
+									        align: 'center',
+									        backgroundColor: 'white',
+									        borderRadius: 50,
+									        padding:5,
+									        font: {
+									          size: 12,
+									        }
+						    			},
+						    			legend: {
+						        labels: {
+						          usePointStyle: true,
+						        },
+						      }
+								      },
+								    }
+					    }); 
+					    
+					document.getElementById("j_idt26:j_idt33").style.height="0px";
+		    }
+		    
+		    function pieSourTest(){
+		    
+						var data = PF("sourPie").cfg.config.data;
+				        var ctx = document.getElementById("pieSour-chart");
+					    var myChart = new Chart(ctx, {
+					        type: 'doughnut',
+					        data: data,
+					         plugins: [ChartDataLabels],
+					        options: {
+							        cutout: "50%",
+								      responsive: true,
+								      maintainAspectRatio: true,
+								      plugins: {
+								         datalabels: {
+									      formatter: (value, ctx) => {
+											  
+							                let sum = 0;
+							                let dataArr = ctx.chart.data.datasets[0].data;
+							                dataArr.map(data => {
+							                    sum += data;
+							                });
+							                let percentage = (value*100 / sum).toFixed(0)+"%";
+							                return percentage;
+
+									      },
+									      color: "#000000",
+									        align: 'center',
+									        backgroundColor: 'white',
+									        borderRadius: 50,
+									        padding:5,
+									        font: {
+									          size: 12,
+									        }
+						    			},
+						    			legend: {
+						        labels: {
+						          usePointStyle: true,
+						        },
+						      }
+								      },
+								    }
+					    }); 
+					    
+					document.getElementById("j_idt26:j_idt35").style.height="0px";
+		    }
+		    
+		     function pieDomTest(){
+		    
+						var data = PF("domPie").cfg.config.data;
+				        var ctx = document.getElementById("pieDom-chart");
+					    var myChart = new Chart(ctx, {
+					        type: 'polarArea',
+					        data: data,
+					         plugins: [ChartDataLabels],
+					        options: {
+							        //cutout: "80%",
+								      responsive: true,
+								      maintainAspectRatio: true,
+								      plugins: {
+								         datalabels: {
+									      formatter: (value, ctx) => {
+											  
+							                let sum = 0;
+							                let dataArr = ctx.chart.data.datasets[0].data;
+							                dataArr.map(data => {
+							                    sum += data;
+							                });
+							                let percentage = (value*100 / sum).toFixed(2)+"%";
+							                return percentage;
+
+									      },
+									      color: "#000000",
+									        align: 'end',
+									        backgroundColor: 'white',
+									        borderRadius: 50,
+									        padding:5,
+									        font: {
+									          size: 10,
+									        }
+						    			},
+						    			legend: {
+						        labels: {
+						          usePointStyle: true,
+						        },
+						      }
+								      },
+								    }
+					    }); 
+					    
+					document.getElementById("j_idt26:j_idt37").style.height="0px";
+		    }
+		    
+		function ext1() {
+		    setTimeout(pieConTest, 1000);
+		}
+		
+		function ext3() {
+		    setTimeout(pieSourTest, 1000);
+		}
+		
+		function ext4() {
+		    //setTimeout(pieDomTest, 1000);
+		}
+		
+	
+		</h:outputScript>
+			
+	</ui:define>
+
+	<ui:define name="content">
+		<h:form rendered="#{loginController.user.profile.dashbaord == true}">
+			<div class="layout-dashboard">
+				<div class="p-grid">
+					<div class="p-col-12 p-md-6 p-xl-4">
+						<div
+							class="card no-gutter widget-overview-box widget-overview-box-1">
+							<span class="overview-icon"> <i class="pi pi-calendar"></i>
+							</span> <span class="overview-title"> PROJETS</span>
+							<div class="p-grid overview-detail">
+								<div class="p-col-12">
+									<div class="overview-number">#{chartJsView.projets.size()}
+										projets au total</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="p-col-12 p-md-6 p-xl-4">
+						<div
+							class="card no-gutter widget-overview-box widget-overview-box-2">
+							<span class="overview-icon"> <i class="pi pi-money-bill"></i>
+							</span> <span class="overview-title"
+								title="Union Européenne et Etats Membres">CONTRIBUTION
+								TOTAL UE et EM (€)</span>
+							<div class="p-grid overview-detail">
+								<div class="p-col-12">
+									<div class="overview-number">
+										<h:outputText value="#{chartJsView.contributionTotal}">
+											<f:convertNumber type="currency" currencySymbol="€"
+												locale="fr-FR" />
+
+										</h:outputText>
+
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+					<div class="p-col-12 p-md-6 p-xl-4">
+						<div
+							class="card no-gutter widget-overview-box widget-overview-box-3">
+							<span class="overview-icon"> <i class="pi pi-money-bill"></i>
+							</span> <span class="overview-title">CONTRIBUTION U.E(€)</span>
+							<div class="p-grid overview-detail">
+								<div class="p-col-12">
+									<div class="overview-number">
+										<h:outputText value="#{chartJsView.contributionUe}">
+											<f:convertNumber type="currency" currencySymbol="€"
+												locale="fr-FR" />
+
+										</h:outputText>
+
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+			</div>
+
+
+
+			<div class="layout-dashboard">
+			
+				<div class="p-grid">
+					<div class="p-col-12 p-md-6 p-xl-6">
+						<div class="card">
+						
+							<H3>Répartitions des projets par region</H3>
+							
+							<canvas id="pie-chart"></canvas>
+							<p:pieChart widgetVar="regPie" id="region" 
+								model="#{chartJsView.pieModel}"
+								style="width: 100%; height: 0px; visibility: hidden;" dataFormat="value" extender="pieExtender">
+								
+							</p:pieChart>
+						
+						</div>
+					</div>
+					<div class="p-col-12 p-md-6 p-xl-6">
+						<div class="card">
+							<H3>Répartitions des projets par type de contractant</H3>
+							<canvas id="pieCont-chart"></canvas>
+							<p:polarAreaChart widgetVar="contPie"  model="#{chartJsView.pieContractantTypeModel}"
+								style="width: 100%; height: 500px;visibility: hidden;" />
+						</div>
+					</div>
+					<div class="p-col-12 p-md-6 p-xl-6">
+						<div class="card revenue">
+							<h3>Répartitions des projets par source de financement</h3>
+							<canvas id="pieSour-chart"></canvas>
+							<p:pieChart widgetVar="sourPie" model="#{chartJsView.sourceNombreModel}"
+								style="width: 100%; height: 300px; visibility: hidden;" showDataLabels="true" />
+						</div>
+
+					</div>
+					
+					<div class="p-col-12 p-md-6 p-xl-12">
+						<div class="card revenue">
+						<H3>Répartitions des projets par Domaines</H3>
+						<canvas id="pieDom-chart"></canvas>
+						<p:barChart widgetVar="domPie" model="#{chartJsView.instrumentNombreModel}"
+								style="width: 100%; height: 500px;" showDataLabels="true" />
+						</div>
+					</div>
+
+
+				</div>
+			</div>
+
+
+
+		</h:form>
+	</ui:define>
+</ui:composition>

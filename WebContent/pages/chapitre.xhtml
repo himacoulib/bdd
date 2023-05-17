@@ -1,0 +1,185 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Gestion Chapitre</ui:define>
+
+	<ui:param name="viewname" value="Gestion Chapitre" />
+
+	<ui:define name="content">
+		<h:form id="form"
+			rendered="#{loginController.user.profile.parametrage == true}">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<p:growl id="messages" showDetail="true" />
+
+
+						<p:toolbar>
+							<p:toolbarGroup>
+								<p:commandButton value="Nouveau" icon="pi pi-plus"
+									actionListener="#{chapitreControllerView.openNew}"
+									update="manage-product-content"
+									oncomplete="PF('manageChapitreDialog').show()"
+									styleClass="success-button" style="margin-right: .5rem" />
+
+							</p:toolbarGroup>
+							<p:toolbarGroup align="right">
+								<p:commandButton value="Export" icon="pi pi-upload"
+									styleClass="help-button" ajax="false">
+									<p:dataExporter type="pdf" target="dt-chapitre"
+										fileName="chapitre" />
+								</p:commandButton>
+							</p:toolbarGroup>
+						</p:toolbar>
+
+						<p:dataTable id="dt-chapitre" widgetVar="dtChapitre"
+							var="chapitre" value="#{chapitreControllerView.chapitres}"
+							reflow="true" styleClass="products-table" selectionMode="single"
+							selection="#{chapitreControllerView.selectedChapitre}"
+							rowKey="#{chapitre.chapitreId}" paginator="true" rows="50"
+							rowSelectMode="add" paginatorPosition="bottom">
+							<f:facet name="header">
+								<div class="products-table-header">
+									<span style="font-weight: bold">Chapitre</span> <span
+										class="filter-container ui-input-icon-left"> <i
+										class="pi pi-search"></i> <p:inputText id="globalFilter"
+											onkeyup="PF('dtChapitre').filter()" placeholder="Search" />
+									</span>
+								</div>
+							</f:facet>
+
+
+
+							<p:column headerText="Nom" sortBy="#{chapitre.chapitreName}"
+								filterBy="#{chapitre.chapitreName}">
+								<h:outputText value="#{chapitre.chapitreName}" />
+							</p:column>
+
+							<p:column exportable="false">
+								<p:rowToggler />
+							</p:column>
+							<p:column headerText="Code" sortBy="#{chapitre.chapitreCode}"
+								filterBy="#{chapitre.chapitreCode}">
+								<h:outputText value="#{chapitre.chapitreCode}" />
+							</p:column>
+
+							<p:column headerText="Description" sortBy="#{chapitre.chapitreDesc}"
+								filterBy="#{chapitre.chapitreDesc}">
+								<h:outputText value="#{chapitre.chapitreDesc}" />
+							</p:column>
+
+							<p:column exportable="false" headerText="Action">
+								<p:commandButton icon="pi pi-pencil"
+									update=":form:manage-product-content"
+									oncomplete="PF('manageChapitreDialog').show()"
+									styleClass="edit-button rounded-button success-button"
+									process="@this">
+									<f:setPropertyActionListener value="#{chapitre}"
+										target="#{chapitreControllerView.selectedChapitre}" />
+								</p:commandButton>
+
+								<p:commandButton class="warning-button rounded-button"
+									action="#{chapitreControllerView.deleteChapitre()}"
+									icon="pi pi-trash" process="@this">
+									<p:confirm header="Confirmation" message="Etes vous sure ?"
+										icon="pi pi-info-circle" />
+									<f:setPropertyActionListener value="#{chapitre}"
+										target="#{chapitreControllerView.selectedChapitre}" />
+								</p:commandButton>
+							</p:column>
+
+							<p:rowExpansion>
+								<div class="orders-subtable">
+									<h5>Liste des secteur du chapitre #{chapitre.chapitreName}</h5>
+									<p:dataTable var="secteur" value="#{chapitre.secteurs}"
+										reflow="true">
+										<p:column headerText="Code" sortBy="#{secteur.secteurCode}">
+											<h:outputText value="#{secteur.secteurCode}" />
+										</p:column>
+
+										<p:column headerText="Nom" sortBy="#{secteur.secteurName}">
+											<h:outputText value="#{secteur.secteurName}" />
+										</p:column>
+
+									</p:dataTable>
+								</div>
+							</p:rowExpansion>
+						</p:dataTable>
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+							responsive="true" width="350">
+							<p:commandButton value="Non" type="button"
+								styleClass="ui-confirmdialog-no ui-button-flat" />
+							<p:commandButton value="Oui" type="button"
+								styleClass="ui-confirmdialog-yes" />
+						</p:confirmDialog>
+						<p:dialog header="Chapitre" width="450" showEffect="fade"
+							modal="true" widgetVar="manageChapitreDialog" responsive="true">
+							<p:outputPanel id="manage-product-content" class="ui-fluid">
+								<p:outputPanel
+									rendered="#{not empty chapitreControllerView.selectedChapitre}">
+									<div class="p-field">
+										<p:outputLabel for="name">Nom</p:outputLabel>
+										<p:inputText id="name"
+											value="#{chapitreControllerView.selectedChapitre.chapitreName}" />
+
+										<p:inputText id="chapitreId" type="hidden"
+											value="#{chapitreControllerView.selectedChapitre.chapitreId}" />
+									</div>
+
+									<div class="p-field">
+										<p:outputLabel for="code">Code</p:outputLabel>
+										<p:inputText id="code"
+											value="#{chapitreControllerView.selectedChapitre.chapitreCode}" />
+									</div>
+
+									<div class="p-field">
+										<p:outputLabel for="descrip">Description</p:outputLabel>
+										<p:inputText id="descrip"
+											value="#{chapitreControllerView.selectedChapitre.chapitreDesc}" />
+									</div>
+
+
+								</p:outputPanel>
+							</p:outputPanel>
+
+							<f:facet name="footer">
+								<p:commandButton value="Save" icon="pi pi-check"
+									actionListener="#{chapitreControllerView.saveChapitre}"
+									update="manage-product-content"
+									process="manage-product-content @this" />
+								<p:commandButton value="Cancel" icon="pi pi-times"
+									onclick="PF('manageChapitreDialog').hide()"
+									class="secondary-button" />
+							</f:facet>
+						</p:dialog>
+
+						<p:confirmDialog widgetVar="deleteChapitreDialog"
+							showEffect="fade" width="300" message="Supprimer le chapitre ?"
+							header="Confirm" severity="warn">
+							<p:commandButton value="Oui" icon="pi pi-check"
+								actionListener="#{chapitreControllerView.deleteChapitre}"
+								process="@this" oncomplete="PF('deleteChapitreDialog').hide()" />
+							<p:commandButton value="Non" type="button"
+								styleClass="secondary-button" icon="pi pi-times"
+								onclick="PF('deleteChapitreDialog').hide()" />
+						</p:confirmDialog>
+
+						<p:confirmDialog global="true" showEffect="fade" width="300">
+							<p:commandButton value="Oui" type="button"
+								styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+							<p:commandButton value="Non" type="button"
+								styleClass="ui-confirmdialog-no secondary-button"
+								icon="pi pi-times" />
+						</p:confirmDialog>
+
+					</div>
+				</div>
+			</div>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

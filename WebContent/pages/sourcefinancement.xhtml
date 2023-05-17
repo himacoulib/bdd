@@ -1,0 +1,158 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Gestion Source Financement</ui:define>
+
+	<ui:param name="viewname" value="Gestion Source" />
+
+	<ui:define name="content">
+		<h:form id="form"
+			rendered="#{loginController.user.profile.parametrage == true}">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<p:growl id="messages" showDetail="true" />
+						<p:toolbar>
+							<p:toolbarGroup>
+								<p:commandButton value="Nouveau" icon="pi pi-plus"
+									actionListener="#{sourcefinancementControllerView.openNew}"
+									update="manage-product-content"
+									oncomplete="PF('manageSourceDialog').show()"
+									styleClass="success-button" style="margin-right: .5rem" />
+
+							</p:toolbarGroup>
+							<p:toolbarGroup align="right">
+								<p:commandButton value="Export" icon="pi pi-upload"
+									styleClass="help-button" ajax="false">
+									<p:dataExporter type="pdf" target="dt-source" fileName="source" />
+								</p:commandButton>
+							</p:toolbarGroup>
+						</p:toolbar>
+
+
+						<p:dataTable id="dt-source" widgetVar="dtSource" var="source"
+							value="#{sourcefinancementControllerView.sources}" reflow="true"
+							styleClass="products-table" selectionMode="single"
+							selection="#{sourcefinancementControllerView.selectedSource}"
+							rowKey="#{source.sourceFinancementId}" paginator="true" rows="50"
+							rowSelectMode="add" paginatorPosition="bottom">
+							<f:facet name="header">
+								<div class="products-table-header">
+									<span style="font-weight: bold">Source</span> <span
+										class="filter-container ui-input-icon-left"> <i
+										class="pi pi-search"></i> <p:inputText id="globalFilter"
+											onkeyup="PF('dtSource').filter()" placeholder="Search" />
+									</span>
+								</div>
+							</f:facet>
+
+
+
+							<p:column headerText="Nom"
+								sortBy="#{source.sourceFinancementNom}"
+								filterBy="#{source.sourceFinancementNom}">
+								<h:outputText value="#{source.sourceFinancementNom}" />
+							</p:column>
+							<p:column exportable="false">
+								<p:rowToggler />
+							</p:column>
+							<p:column headerText="Description"
+								sortBy="#{source.sourceFinancementDesc}"
+								filterBy="#{source.sourceFinancementDesc}">
+								<h:outputText value="#{source.sourceFinancementDesc}" />
+							</p:column>
+
+							<p:column exportable="false" headerText="Action">
+								<p:commandButton icon="pi pi-pencil"
+									update=":form:manage-product-content"
+									oncomplete="PF('manageSourceDialog').show()"
+									styleClass="edit-button rounded-button success-button"
+									process="@this">
+									<f:setPropertyActionListener value="#{source}"
+										target="#{sourcefinancementControllerView.selectedSource}" />
+								</p:commandButton>
+								<p:commandButton class="warning-button rounded-button"
+									icon="pi pi-trash" process="@this"
+									action="#{sourcefinancementControllerView.deleteSources()}">
+
+									<p:confirm header="Confirmation" message="Etes vous sure ?"
+										icon="pi pi-info-circle" />
+									<f:setPropertyActionListener value="#{source}"
+										target="#{sourcefinancementControllerView.selectedSource}" />
+								</p:commandButton>
+							</p:column>
+
+							<p:rowExpansion>
+								<div class="orders-subtable">
+									<h5>Liste des instruments #{source.sourceFinancementNom}</h5>
+									<p:dataTable rowKey="#{instrument.instrumentfinancementId}"
+										var="instrument" value="#{source.instrumentfinancements}"
+										reflow="true">
+										<p:column headerText="Id"
+											sortBy="#{instrument.instrumentfinancementId}">
+											<h:outputText value="#{instrument.instrumentfinancementId}" />
+										</p:column>
+
+										<p:column headerText="Nom"
+											sortBy="#{instrument.instrumentFinancementNom}">
+											<h:outputText value="#{instrument.instrumentFinancementNom}" />
+										</p:column>
+
+									</p:dataTable>
+								</div>
+							</p:rowExpansion>
+						</p:dataTable>
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+							responsive="true" width="350">
+							<p:commandButton value="Non" type="button"
+								styleClass="ui-confirmdialog-no ui-button-flat" />
+							<p:commandButton value="Oui" type="button"
+								styleClass="ui-confirmdialog-yes" />
+						</p:confirmDialog>
+						<p:dialog header="Source" width="450" showEffect="fade"
+							modal="true" widgetVar="manageSourceDialog" responsive="true">
+							<p:outputPanel id="manage-product-content" class="ui-fluid">
+								<p:outputPanel
+									rendered="#{not empty sourcefinancementControllerView.selectedSource}">
+									<div class="p-field">
+										<p:outputLabel for="name">Nom</p:outputLabel>
+										<p:inputText id="name"
+											value="#{sourcefinancementControllerView.selectedSource.sourceFinancementNom}" />
+										<p:inputText id="sourceFinancementId" type="hidden"
+											value="#{sourcefinancementControllerView.selectedSource.sourceFinancementId}" />
+									</div>
+
+									<div class="p-field">
+										<p:outputLabel for="descr">Description</p:outputLabel>
+										<p:inputText id="descr"
+											value="#{sourcefinancementControllerView.selectedSource.sourceFinancementDesc}" />
+									</div>
+
+
+								</p:outputPanel>
+							</p:outputPanel>
+
+							<f:facet name="footer">
+								<p:commandButton value="Save" icon="pi pi-check"
+									actionListener="#{sourcefinancementControllerView.saveSource}"
+									update="manage-product-content"
+									process="manage-product-content @this" />
+								<p:commandButton value="Cancel" icon="pi pi-times"
+									onclick="PF('manageSourceDialog').hide()"
+									class="secondary-button" />
+							</f:facet>
+						</p:dialog>
+
+
+
+					</div>
+				</div>
+			</div>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

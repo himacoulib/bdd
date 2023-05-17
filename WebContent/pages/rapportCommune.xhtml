@@ -1,0 +1,66 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Rapport Commune</ui:define>
+
+	<ui:param name="viewname" value="Rapport commune" />
+
+	<ui:define name="content">
+		<h:form id="form"
+			rendered="#{loginController.user.profile.rapports == true}">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+
+						<div>
+							<p:commandButton value="Exporter en PDF" icon="pi pi-upload"
+								styleClass="help-button" ajax="false">
+								<p:dataExporter type="pdf" target="dt-communes"
+									fileName="commune" />
+							</p:commandButton>
+							&#160;&#160;
+							<p:commandButton value="Exporter en Excel" icon="pi pi-upload"
+								styleClass="success-button" ajax="false">
+								<p:dataExporter type="xls" target="dt-communes"
+									fileName="commune" />
+							</p:commandButton>
+						</div>
+						<p:dataTable id="dt-communes" var="commune" rows="50"
+							paginator="true" value="#{rapportCommuneControllerView.communes}">
+							<f:facet name="header">
+								<div class="products-table-header">
+									<span style="font-weight: bold">Communes</span> <span
+										class="filter-container ui-input-icon-left"> <i
+										class="pi pi-search"></i> <p:inputText id="globalFilter"
+											onkeyup="PF('dtCommunes').filter()" placeholder="Search" />
+									</span>
+								</div>
+							</f:facet>
+
+							<p:column headerText="Nom" sortBy="#{commune.communeNom}"
+								filterBy="#{commune.communeNom}">
+								<h:outputText value="#{commune.communeNom}" />
+							</p:column>
+							<p:column exportable="false">
+
+							</p:column>
+							<p:column headerText="Commune"
+								sortBy="#{commune.cercle.cerlceName}"
+								filterBy="#{commune.cercle.cerlceName}">
+								<h:outputText value="#{commune.cercle.cerlceName}" />
+							</p:column>
+
+						</p:dataTable>
+
+
+					</div>
+				</div>
+			</div>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

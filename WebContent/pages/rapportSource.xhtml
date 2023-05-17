@@ -1,0 +1,72 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Rapport Source Financement</ui:define>
+
+	<ui:param name="viewname" value="Rapport Source Financement" />
+
+	<ui:define name="content">
+		<h:form id="form"
+			rendered="#{loginController.user.profile.rapports == true}">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+
+						<div>
+
+							<p:commandButton value="Exporter en PDF" icon="pi pi-upload"
+								styleClass="help-button" ajax="false">
+								<p:dataExporter type="pdf" target="dt-source"
+									fileName="source" />
+							</p:commandButton>
+							&#160;&#160;
+							<p:commandButton value="Exporter en Excel" icon="pi pi-upload"
+								styleClass="success-button" ajax="false">
+								<p:dataExporter type="xls" target="dt-source"
+									fileName="source" />
+							</p:commandButton>
+						</div>
+						<p:dataTable id="dt-source" widgetVar="dtSource" var="source"
+							value="#{rapportSourceControllerView.sources}" reflow="true"
+							styleClass="products-table"
+							selection="#{rapportSourceControllerView.selectedSource}"
+							rowKey="#{source.sourceFinancementId}" paginator="true" rows="50"
+							rowSelectMode="add" paginatorPosition="bottom">
+							<f:facet name="header">
+								<div class="products-table-header">
+									<span style="font-weight: bold">Source</span> <span
+										class="filter-container ui-input-icon-left"> <i
+										class="pi pi-search"></i> <p:inputText id="globalFilter"
+											onkeyup="PF('dtSource').filter()" placeholder="Search" />
+									</span>
+								</div>
+							</f:facet>
+
+							<p:column headerText="Nom"
+								sortBy="#{source.sourceFinancementNom}"
+								filterBy="#{source.sourceFinancementNom}">
+								<h:outputText value="#{source.sourceFinancementNom}" />
+							</p:column>
+							<p:column exportable="false">
+
+							</p:column>
+							<p:column headerText="Description"
+								sortBy="#{source.sourceFinancementDesc}"
+								filterBy="#{source.sourceFinancementDesc}">
+								<h:outputText value="#{source.sourceFinancementDesc}" />
+							</p:column>
+
+						</p:dataTable>
+
+
+					</div>
+				</div>
+			</div>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

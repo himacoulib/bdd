@@ -1,0 +1,157 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Gestion Instrument</ui:define>
+
+	<ui:param name="viewname" value="Gestion Instrument" />
+
+	<ui:define name="content">
+		<h:form id="form"
+			rendered="#{loginController.user.profile.parametrage == true}">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<p:growl id="messages" showDetail="true" />
+						<p:toolbar>
+							<p:toolbarGroup>
+								<p:commandButton value="Nouveau" icon="pi pi-plus"
+									actionListener="#{instrumentControllerView.openNew}"
+									update="manage-product-content"
+									oncomplete="PF('manageInstrumentDialog').show()"
+									styleClass="success-button" style="margin-right: .5rem" />
+
+							</p:toolbarGroup>
+							<p:toolbarGroup align="right">
+								<p:commandButton value="Export" icon="pi pi-upload"
+									styleClass="help-button" ajax="false">
+									<p:dataExporter type="pdf" target="dt-instrument"
+										fileName="instruments" />
+								</p:commandButton>
+							</p:toolbarGroup>
+						</p:toolbar>
+
+
+						<p:dataTable id="dt-instrument" widgetVar="dtInstrument"
+							var="instrument" value="#{instrumentControllerView.instruments}"
+							reflow="true" styleClass="products-table" selectionMode="single"
+							selection="#{instrumentControllerView.selectedInstrument}"
+							rowKey="#{instrument.instrumentfinancementId}" paginator="true"
+							rows="10" rowSelectMode="add" paginatorPosition="bottom">
+							<f:facet name="header">
+								<div class="products-table-header">
+									<span style="font-weight: bold">Instrument </span> <span
+										class="filter-container ui-input-icon-left"> <i
+										class="pi pi-search"></i> <p:inputText id="globalFilter"
+											onkeyup="PF('dtInstrument').filter()" placeholder="Search" />
+									</span>
+								</div>
+							</f:facet>
+
+
+
+							<p:column headerText="Nom"
+								sortBy="#{instrument.instrumentFinancementNom}"
+								filterBy="#{instrument.instrumentFinancementNom}">
+								<h:outputText value="#{instrument.instrumentFinancementNom}" />
+							</p:column>
+
+							<p:column exportable="false">
+								
+							</p:column>
+							<p:column headerText="Nom"
+								sortBy="#{instrument.sourcefinancement.sourceFinancementNom}"
+								filterBy="#{instrument.sourcefinancement.sourceFinancementNom}">
+								<h:outputText
+									value="#{instrument.sourcefinancement.sourceFinancementNom}" />
+							</p:column>
+
+							<p:column exportable="false" headerText="Action">
+								<p:commandButton icon="pi pi-pencil"
+									update=":form:manage-product-content"
+									oncomplete="PF('manageInstrumentDialog').show()"
+									styleClass="edit-button rounded-button success-button"
+									process="@this">
+									<f:setPropertyActionListener value="#{instrument}"
+										target="#{instrumentControllerView.selectedInstrument}" />
+								</p:commandButton>
+								<p:commandButton class="warning-button rounded-button"
+									icon="pi pi-trash" process="@this"
+									action="#{instrumentControllerView.deleteSelectedInstrument()}">
+
+									<p:confirm header="Confirmation" message="Etes vous sure ?"
+										icon="pi pi-info-circle" />
+									<f:setPropertyActionListener value="#{instrument}"
+										target="#{instrumentControllerView.selectedInstrument}" />
+								</p:commandButton>
+							</p:column>
+
+						</p:dataTable>
+
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+							responsive="true" width="350">
+							<p:commandButton value="Non" type="button"
+								styleClass="ui-confirmdialog-no ui-button-flat" />
+							<p:commandButton value="Oui" type="button"
+								styleClass="ui-confirmdialog-yes" />
+						</p:confirmDialog>
+						<p:dialog header="Instrument" width="450" showEffect="fade"
+							modal="true" widgetVar="manageInstrumentDialog" responsive="true">
+							<p:outputPanel id="manage-product-content" class="ui-fluid">
+								<p:outputPanel
+									rendered="#{not empty instrumentControllerView.selectedInstrument}">
+
+									<div class="p-field">
+										<p:outputLabel
+											rendered="#{instrumentControllerView.editSelected == false}"
+											for="source">Source Financement</p:outputLabel>
+										<p:selectOneMenu id="source" required="true"
+											requiredMessage="Champ obligatoire"
+											value="#{instrumentControllerView.selectedSource}"
+											rendered="#{instrumentControllerView.editSelected == false}">
+											<p:ajax event="change" process="@this"></p:ajax>
+											<f:selectItem itemLabel="Selectionner une source financement" />
+											<f:selectItems itemValue="#{source}" var="source"
+												itemLabel="#{source}"
+												value="#{instrumentControllerView.listSource}" />
+										</p:selectOneMenu>
+									</div>
+
+									<div class="p-field">
+										<p:outputLabel for="name">Nom</p:outputLabel>
+										<p:inputText id="name"
+											value="#{instrumentControllerView.selectedInstrument.instrumentFinancementNom}" />
+										<p:inputText id="instrumentId" type="hidden" required="true"
+											value="#{instrumentControllerView.selectedInstrument.instrumentfinancementId}" />
+									</div>
+
+									<div class="p-field">
+										<p:outputLabel for="descr">Description</p:outputLabel>
+										<p:inputText id="descr"
+											value="#{instrumentControllerView.selectedInstrument.instrumentFinancementDesc}" />
+									</div>
+
+								</p:outputPanel>
+							</p:outputPanel>
+
+							<f:facet name="footer">
+								<p:commandButton value="Save" icon="pi pi-check"
+									actionListener="#{instrumentControllerView.saveInstrument}"
+									update="manage-product-content"
+									process="manage-product-content @this" />
+								<p:commandButton value="Cancel" icon="pi pi-times"
+									onclick="PF('manageInstrumentDialog').hide()"
+									class="secondary-button" />
+							</f:facet>
+						</p:dialog>
+
+					</div>
+				</div>
+			</div>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

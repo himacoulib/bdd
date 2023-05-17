@@ -1,0 +1,134 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<f:facet name="first">
+		<meta charset="utf-8" />
+		<title>EU Project Management - MALI : Login Page</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link rel="shortcut icon"
+			href="#{request.contextPath}/resources/img/favicon.ico"
+			type="image/x-icon"></link>
+
+		<link href="#{request.contextPath}/resources/css/bootstrap.min.css"
+			rel="stylesheet"></link>
+		<link href="#{request.contextPath}/resources/css/font-awesome.min.css"
+			rel="stylesheet"></link>
+		<link
+			href="#{request.contextPath}/resources/css/weather-icons.min.css"
+			rel="stylesheet"></link>
+
+		<link
+			href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300"
+			rel="stylesheet" type="text/css"></link>
+		<link href="#{request.contextPath}/resources/css/dibaw.min.css"
+			rel="stylesheet"></link>
+		<link href="#{request.contextPath}/resources/css/dem.min.css"
+			rel="stylesheet"></link>
+		<link href="#{request.contextPath}/resources/css/typicons.min.css"
+			rel="stylesheet"></link>
+		<link href="#{request.contextPath}/resources/css/animate.min.css"
+			rel="stylesheet"></link>
+		<script type="#{request.contextPath}/resources/text/javascript"
+			src="js/skins.min.js"></script>
+	</f:facet>
+</h:head>
+<!-- /Head -->
+<h:body>
+	<h:form id="login">
+		<div class="animated fadeInDown"
+			style="width: 1400px; text-align: center; margin: 7% auto 0 auto; padding: 19px; background-color: white; box-shadow: 0 0 14px rgba(0, 0, 0, .1);">
+			<div
+				style="font-size: 15px; font-weight: 500; color: #065672; margin-top: 20px; margin-bottom: 12px;">
+				<a style="color: #36638E; font-weight: 600; font-size: 19px;"
+					href="login.aspx">Gestion de projets - Union européenne au Mali</a>
+			</div>
+			<img src="#{request.contextPath}/resources/img/Banniere_drapeaux.jpg"
+				alt="Union Européenne"> </img> <br />
+			<div
+				style="font-family: 'Lucida Sans', 'trebuchet MS', Arial, Helvetica; font-size: 20px; font-weight: 400; color: #444; margin: 10px 10px 0;">CONNEXION</div>
+		</div>
+		<div class="login-container animated fadeInDown"
+			style="max-width: 1400px; margin: 0% auto;">
+			<p:messages id="growl" showDetail="true">
+				<p:autoUpdate />
+			</p:messages>
+			<div class="loginbox bg-white"
+				style="width: 1400px !important; height: 240px !important; webkit-box-shadow: 0 14px 14px rgba(0, 0, 0, .1); -moz-box-shadow: 0 14px 14px rgba(0, 0, 0, .1); box-shadow: 0 14px 14px rgba(0, 0, 0, .1);">
+
+				<div style="max-width: 400px; margin: 0% auto;">
+					<div class="loginbox-or">
+						<div class="or-line"></div>
+						<div class="or">Identifiants</div>
+					</div>
+					<div class="loginbox-textbox">
+						<p:inputText class="form-control" id="email"
+							value="#{loginController.email}" placeholder="Email"
+							required="true" requiredMessage="Email obligatoire" />
+
+					</div>
+					<div class="loginbox-textbox">
+						<p:password id="password" class="form-control"
+							value="#{loginController.password}" required="true"
+							requiredMessage="Mot de passe obligatoire" placeholder="Password"
+							style="display: inline-block;width: 89%;vertical-align:top;" />
+						<button id="button1" class="fa fa-eye-slash" type="button"
+							onclick="checkPassPwd1()"
+							style="display: inline-block; vertical-align: top; height: 34px;">
+
+						</button>
+					</div>
+					<SCRIPT type="text/javascript">
+					function checkPassPwd1() {
+						var field = document.getElementById('login:password');
+						var button= $('#button1');
+
+						if (field.type === 'password') {
+							field.type= 'text';
+						   button.removeClass('fa fa-eye-slash');
+						   button.addClass('fa fa-eye');
+						} else if (field.type === 'text') {
+							   field.type= 'password';
+							   button.removeClass('fa fa-eye');
+							   button.addClass('fa fa-eye-slash');
+							} else {
+						   field.attr('type', 'password');
+						   button.removeClass('fa fa-eye');
+						   button.addClass('fa fa-eye-slash');
+						}
+					}
+											
+					</SCRIPT>
+					<div class="loginbox-forgot"></div>
+					<div class="loginbox-submit">
+						<p:commandButton value="Connexion" class="form-control"
+							style="background-color: #5080d9!important; border-color: #396ad7; color: #fff;"
+							CssClass="btn btn-blue-eu btn-block"
+							wonclick="PF('pbAjaxLong').start();PF('startButton3').disable()"
+							widgetVar="startButton3"
+							actionListener="#{loginController.login}" />
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</h:form>
+	<script type="text/javascript"
+		src="#{request.contextPath}/resources/js/jquery-2.1.3.min.js"></script>
+	<script type="text/javascript"
+		src="#{request.contextPath}/resources/js/bootstrap.min.js"></script>
+	<script type="text/javascript"
+		src="#{request.contextPath}/resources/js/slimscroll/jquery.slimscroll.min.js"></script>
+
+
+	<script src="#{request.contextPath}/resources/js/dibaw.js"></script>
+
+</h:body>
+
+</html>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="ehcache.xsd" updateCheck="true"
+	monitoring="autodetect" dynamicConfig="true">
+
+	<diskStore path="java.io.tmpdir/ehcache" />
+
+	<defaultCache maxEntriesLocalHeap="10000" eternal="false"
+		timeToIdleSeconds="120" timeToLiveSeconds="120" diskSpoolBufferSizeMB="30"
+		maxEntriesLocalDisk="10000000" diskExpiryThreadIntervalSeconds="120"
+		memoryStoreEvictionPolicy="LRU" statistics="true">
+		<persistence strategy="localTempSwap" />
+	</defaultCache>
+
+	<cache name="Budget" maxEntriesLocalHeap="10000" eternal="false"
+		timeToIdleSeconds="5" timeToLiveSeconds="10">
+		<persistence strategy="localTempSwap" />
+	</cache>
+	<cache name="Calendrier" maxEntriesLocalHeap="10000" eternal="false"
+		timeToIdleSeconds="5" timeToLiveSeconds="10">
+		<persistence strategy="localTempSwap" />
+	</cache>
+	<cache name="Cercle" maxEntriesLocalHeap="10000" eternal="false"
+		timeToIdleSeconds="5" timeToLiveSeconds="10">
+		<persistence strategy="localTempSwap" />
+	</cache>
+	<cache name="Chapitre" maxEntriesLocalHeap="10000" eternal="false"
+		timeToIdleSeconds="5" timeToLiveSeconds="10">
+		<persistence strategy="localTempSwap" />
+	</cache>
+	<cache name="Commune" maxEntriesLocalHeap="10000" eternal="false"
+		timeToIdleSeconds="5" timeToLiveSeconds="10">
+		<persistence strategy="localTempSwap" />
+	</cache>
+	<cache name="Contractant" maxEntriesLocalHeap="10000" eternal="false"
+		timeToIdleSeconds="5" timeToLiveSeconds="10">
+		<persistence strategy="localTempSwap" />
+	</cache>
+	<cache name="Contractanttype" maxEntriesLocalHeap="10000" eternal="false"
+		timeToIdleSeconds="5" timeToLiveSeconds="10">
+		<persistence strategy="localTempSwap" />
+	</cache>
+	<cache name="Devise" maxEntriesLocalHeap="10000" eternal="false"
+		timeToIdleSeconds="5" timeToLiveSeconds="10">
+		<persistence strategy="localTempSwap" />
+	</cache>
+	<cache name="Document" maxEntriesLocalHeap="10000" eternal="false"
+		timeToIdleSeconds="5" timeToLiveSeconds="10">
+		<persistence strategy="localTempSwap" />
+	</cache>
+	<cache name="Etatavancement" maxEntriesLocalHeap="10000" eternal="false"
+		timeToIdleSeconds="5" timeToLiveSeconds="10">
+		<persistence strategy="localTempSwap" />
+	</cache>
+	<cache name="Instrumentfinancement" maxEntriesLocalHeap="10000" eternal="false"
+		timeToIdleSeconds="5" timeToLiveSeconds="10">
+		<persistence strategy="localTempSwap" />
+	</cache>
+	<cache name="Localisation" maxEntriesLocalHeap="10000" eternal="false"
+		timeToIdleSeconds="5" timeToLiveSeconds="10">
+		<persistence strategy="localTempSwap" />
+	</cache>
+	<cache name="Pays" maxEntriesLocalHeap="10000" eternal="false"
+		timeToIdleSeconds="5" timeToLiveSeconds="10">
+		<persistence strategy="localTempSwap" />
+	</cache>
+	<cache name="Photo" maxEntriesLocalHeap="10000" eternal="false"
+		timeToIdleSeconds="5" timeToLiveSeconds="10">
+		<persistence strategy="localTempSwap" />
+	</cache>
+	<cache name="Pointfocal" maxEntriesLocalHeap="10000" eternal="false"
+		timeToIdleSeconds="5" timeToLiveSeconds="10">
+		<persistence strategy="localTempSwap" />
+	</cache>
+	<cache name="Profile" maxEntriesLocalHeap="10000" eternal="false"
+		timeToIdleSeconds="5" timeToLiveSeconds="10">
+		<persistence strategy="localTempSwap" />
+	</cache>
+	<cache name="Projet" maxEntriesLocalHeap="10000" eternal="false"
+		timeToIdleSeconds="5" timeToLiveSeconds="10">
+		<persistence strategy="localTempSwap" />
+	</cache>
+	<cache name="Projetchapitre" maxEntriesLocalHeap="10000" eternal="false"
+		timeToIdleSeconds="5" timeToLiveSeconds="10">
+		<persistence strategy="localTempSwap" />
+	</cache>
+	<cache name="Region" maxEntriesLocalHeap="10000" eternal="false"
+		timeToIdleSeconds="5" timeToLiveSeconds="10">
+		<persistence strategy="localTempSwap" />
+	</cache>
+	<cache name="Secteur" maxEntriesLocalHeap="10000" eternal="false"
+		timeToIdleSeconds="5" timeToLiveSeconds="10">
+		<persistence strategy="localTempSwap" />
+	</cache>
+	<cache name="SourceFinancement" maxEntriesLocalHeap="10000" eternal="false"
+		timeToIdleSeconds="5" timeToLiveSeconds="10">
+		<persistence strategy="localTempSwap" />
+	</cache>
+	<cache name="SousSecteur" maxEntriesLocalHeap="10000" eternal="false"
+		timeToIdleSeconds="5" timeToLiveSeconds="10">
+		<persistence strategy="localTempSwap" />
+	</cache>
+	<cache name="Utilisateur" maxEntriesLocalHeap="10000" eternal="false"
+		timeToIdleSeconds="5" timeToLiveSeconds="10">
+		<persistence strategy="localTempSwap" />
+	</cache>
+	
+
+	<cache name="org.hibernate.cache.internal.StandardQueryCache"
+		maxEntriesLocalHeap="1000" eternal="false" timeToLiveSeconds="120">
+		<persistence strategy="localTempSwap" />
+	</cache>
+
+	<cache name="org.hibernate.cache.spi.UpdateTimestampsCache"
+		maxEntriesLocalHeap="5000" eternal="true">
+		<persistence strategy="localTempSwap" />
+	</cache>
+</ehcache>

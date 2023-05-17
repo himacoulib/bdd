@@ -1,0 +1,76 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Rapport Chapitre</ui:define>
+
+	<ui:param name="viewname" value="Rapport Chapitre" />
+
+	<ui:define name="content">
+		<h:form id="form" rendered="#{loginController.user.profile.rapports == true}">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<div>
+							<p:commandButton value="Exporter en PDF" icon="pi pi-upload"
+								styleClass="help-button" ajax="false">
+								<p:dataExporter type="pdf" target="dt-chapitre"
+									fileName="chapitre" />
+							</p:commandButton>
+							&#160;&#160;
+							<p:commandButton value="Exporter en Excel" icon="pi pi-upload"
+								styleClass="success-button" ajax="false">
+								<p:dataExporter type="xls" target="dt-chapitre"
+									fileName="chapitre" />
+							</p:commandButton>
+						</div>
+
+						<p:dataTable id="dt-chapitre" widgetVar="dtChapitre" var="chapitre"
+							value="#{rapportChapitreControllerView.chapitres}" reflow="true"
+							styleClass="products-table"
+							selection="#{rapportChapitreControllerView.selectedChapitre}"
+							rowKey="#{chapitre.chapitreId}" paginator="true" rows="50" paginatorPosition="bottom">
+							<f:facet name="header">
+								<div class="products-table-header">
+									<span style="font-weight: bold">Chapitre</span> <span
+										class="filter-container ui-input-icon-left"> <i
+										class="pi pi-search"></i> <p:inputText id="globalFilter"
+											onkeyup="PF('dtChapitre').filter()" placeholder="Search" />
+									</span>
+								</div>
+							</f:facet>
+
+							
+							
+							<p:column headerText="Nom" sortBy="#{chapitre.chapitreName}"
+								filterBy="#{chapitre.chapitreName}">
+								<h:outputText value="#{chapitre.chapitreName}" />
+							</p:column>
+							<p:column exportable="false">
+								
+							</p:column>
+							<p:column headerText="Code" sortBy="#{chapitre.chapitreCode}"
+								filterBy="#{chapitre.chapitreCode}">
+								<h:outputText value="#{chapitre.chapitreCode}" />
+							</p:column>
+							
+							<p:column headerText="Description" sortBy="#{chapitre.chapitreDesc}"
+								filterBy="#{chapitre.chapitreDesc}">
+								<h:outputText value="#{chapitre.chapitreDesc}" />
+							</p:column>
+
+							
+						</p:dataTable>
+
+						
+						
+					</div>
+				</div>
+			</div>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

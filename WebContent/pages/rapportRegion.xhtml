@@ -1,0 +1,70 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Rapport Region</ui:define>
+
+	<ui:param name="viewname" value="Rapport Region" />
+
+	<ui:define name="content">
+		<h:form id="form"
+			rendered="#{loginController.user.profile.rapports == true}">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+
+						<div>
+
+							<p:commandButton value="Exporter en PDF" icon="pi pi-upload"
+								styleClass="help-button" ajax="false">
+								<p:dataExporter type="pdf" target="dt-regions" fileName="region" />
+							</p:commandButton>
+							&#160;&#160;
+							<p:commandButton value="Exporter en Excel" icon="pi pi-upload"
+								styleClass="success-button" ajax="false">
+								<p:dataExporter type="xls" target="dt-regions" fileName="region" />
+							</p:commandButton>
+						</div>
+						<p:dataTable id="dt-regions" widgetVar="dtRegions" var="region"
+							value="#{rapportRegionControllerView.regions}" reflow="true"
+							styleClass="products-table"
+							selection="#{rapportRegionControllerView.selectedRegion}"
+							rowKey="#{region.id}" paginator="true" rows="50"
+							paginatorPosition="bottom">
+							<f:facet name="header">
+								<div class="products-table-header">
+									<span style="font-weight: bold">Regions</span> <span
+										class="filter-container ui-input-icon-left"> <i
+										class="pi pi-search"></i> <p:inputText id="globalFilter"
+											onkeyup="PF('dtRegions').filter()" placeholder="Search" />
+									</span>
+								</div>
+							</f:facet>
+
+
+
+							<p:column headerText="Nom" sortBy="#{region.regionNom}"
+								filterBy="#{region.regionNom}">
+								<h:outputText value="#{region.regionNom}" />
+							</p:column>
+							<p:column exportable="false">
+
+							</p:column>
+							<p:column headerText="Pays" sortBy="#{region.pays.paysNom}"
+								filterBy="#{region.pays.paysNom}">
+								<h:outputText value="#{region.pays.paysNom}" />
+							</p:column>
+
+
+						</p:dataTable>
+
+					</div>
+				</div>
+			</div>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

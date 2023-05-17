@@ -1,0 +1,364 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Rapport Projet</ui:define>
+
+	<ui:param name="viewname" value="Gestion Projet" />
+
+	<ui:define name="content">
+		<h:form>
+
+			<div class="card">
+				<h5 style="margin-top: 0">Veuillez selectionner les éléments à
+					exporter</h5>
+				<p:pickList id="instantPickList"
+					value="#{rapportProjetControllerView.xlsFiles}" var="xlsheader"
+					itemLabel="#{xlsheader.name}" itemValue="#{xlsheader}"
+					transferOnCheckboxClick="true" showCheckbox="true"
+					showSourceControls="true" showTargetControls="true"
+					responsive="true" converter="exportXlsManager">
+					<f:facet name="sourceCaption">Disponible</f:facet>
+					<f:facet name="targetCaption">A exporter</f:facet>
+				</p:pickList>
+				<br />
+				<p:commandButton type="submit" value="Exporter en Excel"
+					icon="pi pi-upload" styleClass="success-button" ajax="false"
+					actionListener="#{rapportProjetControllerView.readMyAssocImTypVariables()}">
+
+				</p:commandButton>
+
+			</div>
+		</h:form>
+
+		<div class="p-grid crud-demo">
+			<div class="p-col-12">
+				<h:form id="form"
+					rendered="#{loginController.user.profile.rapports == true}">
+					<div class="p-grid crud-demo">
+						<div class="p-col-12">
+							<div class="card">
+								<p:growl id="messages" showDetail="true" />
+								<div>
+
+									<!-- <p:commandButton value="Exporter en PDF" icon="pi pi-upload"
+								styleClass="help-button" ajax="false">
+								<p:dataExporter type="pdf" target="dt-projet" fileName="projet" />
+							</p:commandButton>
+							&#160;&#160;
+							 <p:commandButton value="Exporter en Excel" icon="pi pi-upload"
+								styleClass="success-button"
+								oncomplete="PF('exportXlsFile').show()"> 
+
+							</p:commandButton>-->
+
+
+								</div>
+								<p:dataTable id="dt-projet" widgetVar="dtProjet" var="projet"
+									value="#{rapportProjetControllerView.getProjectDatas}"
+									reflow="true" styleClass="products-table"
+									selectionMode="single" rowKey="#{projet.projetId}"
+									paginator="true" rows="50" paginatorPosition="bottom"
+									tableStyle="width: auto;">
+
+									<f:facet name="header">
+										<div class="products-table-header">
+											<span style="font-weight: bold">Liste des projets</span> <span
+												class="filter-container ui-input-icon-left"> <i
+												class="pi pi-search"></i> <p:inputText id="globalFilter"
+													onkeyup="PF('dtProjet').filter()" placeholder="Search" />
+											</span>
+										</div>
+									</f:facet>
+
+
+									<p:column headerText="Numero contrat"
+										sortBy="#{projet.projetNumContrat}"
+										filterBy="#{projet.projetNumContrat}">
+										<h:outputText value="#{projet.projetNumContrat}" />
+									</p:column>
+
+									<p:column headerText="Titre" sortBy="#{projet.projetTitre}"
+										filterBy="#{projet.projetTitre}">
+										<h:outputText value="#{projet.projetTitre}" />
+									</p:column>
+									<p:column headerText="Domaine">
+										<ui:repeat id="dt-chapitre" var="chapitre"
+											value="#{projet.chapitres}"
+											rowKey="#{chapitre.secteurHierarId}" paginator="false">
+
+											<p:column headerText="Nom" sortBy="#{chapitre.codeSecteur}">
+												<h:outputText value="#{chapitre.codeSecteur} : " />
+											</p:column>
+											<p:column headerText="Code" sortBy="#{chapitre.secteurNom}">
+												<h:outputText value="#{chapitre.secteurNom} | " />
+											</p:column>
+
+										</ui:repeat>
+									</p:column>
+
+									<p:column headerText="Status des projets"
+										sortBy="#{projet.status}" filterBy="#{projet.status}">
+										<h:outputText value="#{projet.status}" />
+									</p:column>
+
+
+									<p:column headerText="Budget   ">
+										<h:outputText value="#{projet.projetBudget}">
+											<f:convertNumber type="currency" currencySymbol="€"
+												locale="fr-FR" />
+
+										</h:outputText>
+									</p:column>
+
+									<p:column exportable="false" headerText="Action">
+										<p:commandButton icon="pi pi-search"
+											update=":form:manage-product-content"
+											oncomplete="PF('manageProjetDialog').show()"
+											styleClass="edit-button rounded-button success-button"
+											process="@this">
+											<f:setPropertyActionListener value="#{projet}"
+												target="#{rapportProjetControllerView.selectedProjet}" />
+										</p:commandButton>
+
+									</p:column>
+
+								</p:dataTable>
+								<p:dialog header="Expoter un fichier Excel" showEffect="fade"
+									resizable="true" blockScroll="true" widgetVar="exportXlsFile"
+									height="100%">
+
+
+
+								</p:dialog>
+
+								<p:dialog header="Detaille Projet" showEffect="fade"
+									resizable="true" blockScroll="true"
+									widgetVar="manageProjetDialog">
+									<p:outputPanel style="text-align:center;"
+										id="manage-product-content" class="ui-fluid">
+
+
+										<p:tabView>
+											<p:tab title="Information Projet">
+												<p:tabView orientation="bottom">
+													<p:tab title="Titre">
+														<p:outputPanel class="p-mt-2">
+															<p class="p-m-0">#{rapportProjetControllerView.selectedProjet.projetTitre}</p>
+														</p:outputPanel>
+													</p:tab>
+													<p:tab title="Description">
+														<p:outputPanel class="p-mt-2">
+															<p class="p-m-0">#{rapportProjetControllerView.selectedProjet.projetDescription}</p>
+														</p:outputPanel>
+													</p:tab>
+													<p:tab title="Objectif Generaux">
+														<p:outputPanel class="p-mt-2">
+															<p class="p-m-0">#{rapportProjetControllerView.selectedProjet.projetObjectifGeneraux}</p>
+														</p:outputPanel>
+													</p:tab>
+													<p:tab title="Objectif spécifique">
+														<p:outputPanel class="p-mt-2">
+															<p class="p-m-0">#{rapportProjetControllerView.selectedProjet.projetObjectifSpecifiques}</p>
+														</p:outputPanel>
+													</p:tab>
+													<p:tab title="Résultat prévus">
+														<p:outputPanel class="p-mt-2">
+															<p class="p-m-0">#{rapportProjetControllerView.selectedProjet.projetResultatsPrevus}</p>
+														</p:outputPanel>
+													</p:tab>
+												</p:tabView>
+											</p:tab>
+											<p:tab title="Budget">
+												<p:dataTable id="dt-projet" var="entry"
+													value="#{rapportProjetControllerView.selectedProjet.budgetSourceFinancement}"
+													reflow="true" styleClass="products-table"
+													selectionMode="single" rowKey="#{entry.key}">
+
+													<p:column headerText="Source de Financement"
+														sortBy="#{entry.value}">
+														<h:outputText value="#{entry.value}" />
+													</p:column>
+													<p:column exportable="false">
+														<p:rowToggler />
+													</p:column>
+													<p:column headerText="Budget" sortBy="#{entry.key}">
+														<h:outputText value="#{entry.key}" />
+													</p:column>
+
+
+												</p:dataTable>
+											</p:tab>
+
+											<p:tab title="Source financement">
+												<p:dataTable id="dt-source" var="sourceFin"
+													value="#{rapportProjetControllerView.selectedProjet.projetSourceFinancements}"
+													reflow="true" styleClass="products-table"
+													selectionMode="single"
+													rowKey="#{sourceFin.sourceFinancementId}" paginator="true"
+													rows="10" paginatorPosition="bottom">
+
+
+													<p:column headerText="Nom"
+														sortBy="#{sourceFin.sourceFinancementNom}">
+														<h:outputText value="#{sourceFin.sourceFinancementNom}" />
+													</p:column>
+													<p:column exportable="false">
+														<p:rowToggler />
+													</p:column>
+													<p:column headerText="Description"
+														sortBy="#{sourceFin.sourceFinancementDesc}">
+														<h:outputText value="#{sourceFin.sourceFinancementDesc}" />
+													</p:column>
+
+												</p:dataTable>
+											</p:tab>
+											<p:tab title="Calendrier">
+												<p:dataTable id="dt-calendrier" var="calendrier"
+													value="#{rapportProjetControllerView.selectedProjet.calendriers}"
+													reflow="true" styleClass="products-table"
+													selectionMode="single" rowKey="#{calendrier.calendrierId}"
+													paginator="true" rows="10" paginatorPosition="bottom">
+													<p:column headerText="Commentaire"
+														sortBy="#{calendrier.calendrierCommmentaires}">
+														<h:outputText
+															value="#{calendrier.calendrierCommmentaires}" />
+													</p:column>
+													<p:column exportable="false">
+														<p:rowToggler />
+													</p:column>
+													<p:column headerText="Date"
+														sortBy="#{calendrier.calendrierDate}">
+														<h:outputText value="#{calendrier.calendrierDate}" />
+													</p:column>
+
+												</p:dataTable>
+											</p:tab>
+											<p:tab title="Chapitres">
+												<p:dataTable id="dt-chapitre" var="chapitre"
+													value="#{rapportProjetControllerView.selectedProjet.chapitres}"
+													reflow="true" styleClass="products-table"
+													selectionMode="single" rowKey="#{chapitre.secteurHierarId}"
+													paginator="true" rows="10" paginatorPosition="bottom">
+													<p:column headerText="Code"
+														sortBy="#{chapitre.codeSecteur}">
+														<h:outputText value="#{chapitre.codeSecteur}" />
+													</p:column>
+													<p:column exportable="false">
+														<p:rowToggler />
+													</p:column>
+													<p:column headerText="Nom" sortBy="#{chapitre.secteurNom}">
+														<h:outputText value="#{chapitre.secteurNom}" />
+													</p:column>
+
+												</p:dataTable>
+											</p:tab>
+											<p:tab title="Secteurs">
+												<p:dataTable id="dt-secteur" var="secteur"
+													value="#{rapportProjetControllerView.selectedProjet.projetSecteurs}"
+													reflow="true" styleClass="products-table"
+													selectionMode="single" rowKey="#{secteur.formerSectorId}"
+													paginator="true" rows="10" paginatorPosition="bottom">
+													<p:column headerText="Code" sortBy="#{secteur.codeSecteur}">
+														<h:outputText value="#{secteur.codeSecteur}" />
+													</p:column>
+													<p:column exportable="false">
+														<p:rowToggler />
+													</p:column>
+													<p:column headerText="Nom" sortBy="#{secteur.secteurNom}">
+														<h:outputText value="#{secteur.secteurNom}" />
+													</p:column>
+
+												</p:dataTable>
+											</p:tab>
+											<p:tab title="Contractants">
+												<p:dataTable id="dt-contractant" var="contractant"
+													value="#{rapportProjetControllerView.selectedProjet.contractants}"
+													reflow="true" styleClass="products-table"
+													selectionMode="single"
+													rowKey="#{contractant.contractantId}" paginator="true"
+													rows="10" paginatorPosition="bottom">
+													<p:column headerText="Nom"
+														sortBy="#{contractant.contractantNom}">
+														<h:outputText value="#{contractant.contractantNom}" />
+													</p:column>
+													<p:column exportable="false">
+														<p:rowToggler />
+													</p:column>
+													<p:column headerText="Type"
+														sortBy="#{contractant.contractanttype.contractantTypeNom}">
+														<h:outputText
+															value="#{contractant.contractanttype.contractantTypeNom}" />
+													</p:column>
+
+													<p:column headerText="Siglet"
+														sortBy="#{contractant.contractantSigle}">
+														<h:outputText value="#{contractant.contractantSigle}" />
+													</p:column>
+
+												</p:dataTable>
+											</p:tab>
+
+											<p:tab title="Regions">
+												<p:dataTable id="dt-localisation" var="region"
+													value="#{rapportProjetControllerView.selectedProjet.regions}"
+													reflow="true" styleClass="products-table"
+													selectionMode="single" rowKey="#{region.id}"
+													paginator="true" rows="10" paginatorPosition="bottom">
+													<p:column headerText="Nom" sortBy="#{region.regionNom}">
+														<h:outputText value="#{region.regionNom}" />
+													</p:column>
+													<p:column exportable="false">
+														<p:rowToggler />
+													</p:column>
+
+												</p:dataTable>
+											</p:tab>
+											<p:tab title="Cercle">
+												<p:dataTable id="dt-cercle" var="cercle"
+													value="#{rapportProjetControllerView.selectedProjet.cercles}"
+													reflow="true" styleClass="products-table"
+													selectionMode="single" rowKey="#{cercle.id}"
+													paginator="true" rows="10" paginatorPosition="bottom">
+													<p:column headerText="Nom" sortBy="#{cercle.cerlceName}">
+														<h:outputText value="#{cercle.cerlceName}" />
+													</p:column>
+													<p:column exportable="false">
+														<p:rowToggler />
+													</p:column>
+
+												</p:dataTable>
+											</p:tab>
+											<p:tab title="Commune">
+												<p:dataTable id="dt-commune" var="commune"
+													value="#{rapportProjetControllerView.selectedProjet.communes}"
+													reflow="true" styleClass="products-table"
+													selectionMode="single" rowKey="#{commune.id}"
+													paginator="true" rows="10" paginatorPosition="bottom">
+													<p:column headerText="Nom" sortBy="#{commune.communeNom}">
+														<h:outputText value="#{commune.communeNom}" />
+													</p:column>
+													<p:column exportable="false">
+														<p:rowToggler />
+													</p:column>
+
+												</p:dataTable>
+											</p:tab>
+
+										</p:tabView>
+
+									</p:outputPanel>
+								</p:dialog>
+							</div>
+
+						</div>
+					</div>
+				</h:form>
+			</div>
+		</div>
+	</ui:define>
+
+</ui:composition>

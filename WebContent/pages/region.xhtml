@@ -1,0 +1,181 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Gestion Region</ui:define>
+
+	<ui:param name="viewname" value="Gestion Region" />
+
+	<ui:define name="content">
+		<h:form id="form"
+			rendered="#{loginController.user.profile.parametrage == true}">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<p:growl id="messages" showDetail="true" />
+						<p:toolbar>
+							<p:toolbarGroup>
+								<p:commandButton value="Nouveau" icon="pi pi-plus"
+									actionListener="#{regionControllerView.openNew}"
+									update="manage-product-content"
+									oncomplete="PF('manageRegionDialog').show()"
+									styleClass="success-button" style="margin-right: .5rem" />
+
+							</p:toolbarGroup>
+							<p:toolbarGroup align="right">
+								<p:commandButton value="Export" icon="pi pi-upload"
+									styleClass="help-button" ajax="false">
+									<p:dataExporter type="pdf" target="dt-regions"
+										fileName="Regions" />
+								</p:commandButton>
+							</p:toolbarGroup>
+						</p:toolbar>
+
+
+						<p:dataTable id="dt-regions" widgetVar="dtRegions" var="region"
+							value="#{regionControllerView.regions}" reflow="true"
+							styleClass="products-table"
+							selection="#{regionControllerView.selectedRegions}"
+							rowKey="#{region.id}" paginator="true" rows="50"
+							rowSelectMode="add" paginatorPosition="bottom">
+							<f:facet name="header">
+								<div class="products-table-header">
+									<span style="font-weight: bold">Regions</span> <span
+										class="filter-container ui-input-icon-left"> <i
+										class="pi pi-search"></i> <p:inputText id="globalFilter"
+											onkeyup="PF('dtRegions').filter()" placeholder="Search" />
+									</span>
+								</div>
+							</f:facet>
+
+							<p:column headerText="Nom" sortBy="#{region.regionNom}"
+								filterBy="#{region.regionNom}">
+								<h:outputText value="#{region.regionNom}" />
+							</p:column>
+							<p:column exportable="false">
+								<p:rowToggler />
+							</p:column>
+							<p:column headerText="Pays" sortBy="#{region.pays.paysNom}"
+								filterBy="#{region.pays.paysNom}">
+								<h:outputText value="#{region.pays.paysNom}" />
+							</p:column>
+
+							<p:column exportable="false" headerText="Action">
+								<p:commandButton icon="pi pi-pencil"
+									update=":form:manage-product-content"
+									oncomplete="PF('manageRegionDialog').show()"
+									styleClass="edit-button rounded-button success-button"
+									process="@this">
+									<f:setPropertyActionListener value="#{region}"
+										target="#{regionControllerView.selectedRegion}" />
+								</p:commandButton>
+								<p:commandButton class="warning-button rounded-button"
+									icon="pi pi-trash" process="@this"
+									oncomplete="PF('deleteRegionDialog').show()">
+									<p:confirm header="Confirmation" message="Etes vous sure ?"
+										icon="pi pi-info-circle" />
+									<f:setPropertyActionListener value="#{region}"
+										target="#{regionControllerView.selectedRegion}" />
+								</p:commandButton>
+							</p:column>
+
+							<p:rowExpansion>
+								<div class="orders-subtable">
+									<h5>Liste des cercles de #{region.regionNom}</h5>
+									<p:dataTable var="cercle" value="#{region.cercles}"
+										rowKey="#{region.id}" reflow="true">
+										<p:column headerText="Id" sortBy="#{cercle.id.cerlceId}">
+											<h:outputText value="#{cercle.id.cerlceId}" />
+										</p:column>
+
+										<p:column headerText="Nom" sortBy="#{cercle.cerlceName}">
+											<h:outputText value="#{cercle.cerlceName}" />
+										</p:column>
+
+									</p:dataTable>
+								</div>
+							</p:rowExpansion>
+						</p:dataTable>
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+							responsive="true" width="350">
+							<p:commandButton value="Non" type="button"
+								styleClass="ui-confirmdialog-no ui-button-flat" />
+							<p:commandButton value="Oui" type="button"
+								styleClass="ui-confirmdialog-yes" />
+						</p:confirmDialog>
+						<p:dialog header="Region" width="450" showEffect="fade"
+							modal="true" widgetVar="manageRegionDialog" responsive="true">
+							<p:outputPanel id="manage-product-content" class="ui-fluid">
+								<p:outputPanel
+									rendered="#{not empty regionControllerView.selectedRegion}">
+
+									<div class="p-field">
+										<p:outputLabel for="pays">PAYS</p:outputLabel>
+										<p:inputText id="pays" disabled="true" value="MALI" />
+										<p:inputText id="paysId" type="hidden"
+											value="#{regionControllerView.selectedRegion.id.paysId}" />
+										<p:inputText id="regionId" type="hidden"
+											value="#{regionControllerView.selectedRegion.id.regionId}" />
+
+									</div>
+
+									<div class="p-field">
+										<p:outputLabel for="name">Name</p:outputLabel>
+										<p:inputText id="name"
+											value="#{regionControllerView.selectedRegion.regionNom}" />
+									</div>
+
+									<div class="p-field">
+										<p:outputLabel for="long">Longitude</p:outputLabel>
+										<p:inputText id="long"
+											value="#{regionControllerView.selectedRegion.regionLong}" />
+									</div>
+									<div class="p-field">
+										<p:outputLabel for="lat">Latitude</p:outputLabel>
+										<p:inputText id="lat"
+											value="#{regionControllerView.selectedRegion.regionLat}" />
+									</div>
+
+
+								</p:outputPanel>
+							</p:outputPanel>
+
+							<f:facet name="footer">
+								<p:commandButton value="Save" icon="pi pi-check"
+									actionListener="#{regionControllerView.saveRegion}"
+									update="manage-product-content"
+									process="manage-product-content @this" />
+								<p:commandButton value="Cancel" icon="pi pi-times"
+									onclick="PF('manageRegionDialog').hide()"
+									class="secondary-button" />
+							</f:facet>
+						</p:dialog>
+
+						<p:confirmDialog widgetVar="deleteRegionDialog" showEffect="fade"
+							width="300" message="Supprimer la Region ?" header="Confirm"
+							severity="warn">
+							<p:commandButton value="Oui" icon="pi pi-check"
+								actionListener="#{regionControllerView.deleteRegion}"
+								process="@this" oncomplete="PF('deleteRegionDialog').hide()" />
+							<p:commandButton value="Non" type="button"
+								styleClass="secondary-button" icon="pi pi-times"
+								onclick="PF('deleteRegionDialog').hide()" />
+						</p:confirmDialog>
+
+						<p:confirmDialog global="true" showEffect="fade" width="300">
+							<p:commandButton value="Oui" type="button"
+								styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+							<p:commandButton value="Non" type="button"
+								styleClass="ui-confirmdialog-no secondary-button"
+								icon="pi pi-times" />
+						</p:confirmDialog>
+					</div>
+				</div>
+			</div>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

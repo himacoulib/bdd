@@ -1,0 +1,140 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Gestion Devise</ui:define>
+
+	<ui:param name="viewname" value="Gestion devise" />
+
+	<ui:define name="content">
+		<h:form id="form" rendered="#{loginController.user.profile.parametrage == true}">
+			<div class="p-grid crud-demo">
+				<div class="p-col-12">
+					<div class="card">
+						<p:growl id="messages" showDetail="true" />
+						<p:toolbar>
+							<p:toolbarGroup>
+								<p:commandButton value="Nouveau" icon="pi pi-plus"
+									actionListener="#{deviseControllerView.openNew}"
+									update="manage-product-content"
+									oncomplete="PF('manageDeviseDialog').show()"
+									styleClass="success-button" style="margin-right: .5rem" />
+								
+							</p:toolbarGroup>
+							<p:toolbarGroup align="right">
+								<p:commandButton value="Export" icon="pi pi-upload"
+									styleClass="help-button" ajax="false">
+									<p:dataExporter type="pdf" target="dt-devise" fileName="devise" />
+								</p:commandButton>
+							</p:toolbarGroup>
+						</p:toolbar>
+
+
+						<p:dataTable id="dt-devise" widgetVar="dtDevise" var="devise"
+							value="#{deviseControllerView.devises}" reflow="true"
+							styleClass="products-table" selectionMode="single"
+							selection="#{deviseControllerView.selectedDevise}"
+							rowKey="#{devise.deviseId}" paginator="true" rows="50"
+							rowSelectMode="add" paginatorPosition="bottom">
+							<f:facet name="header">
+								<div class="products-table-header">
+									<span style="font-weight: bold">Devise</span> <span
+										class="filter-container ui-input-icon-left"> <i
+										class="pi pi-search"></i> <p:inputText id="globalFilter"
+											onkeyup="PF('dtDevise').filter()" placeholder="Search" />
+									</span>
+								</div>
+							</f:facet>
+
+							
+							<p:column headerText="Nom" sortBy="#{devise.deviseNom}"
+								filterBy="#{devise.deviseNom}">
+								<h:outputText value="#{devise.deviseNom}" />
+							</p:column>
+
+							<p:column>
+								
+							</p:column>
+							<p:column headerText="Flags" sortBy="#{devise.deviseSymb}"
+								filterBy="#{devise.deviseSymb}">
+								<h:outputText value="#{devise.deviseSymb}" />
+							</p:column>
+
+							<p:column exportable="false" headerText="Action">
+								<p:commandButton icon="pi pi-pencil"
+									update=":form:manage-product-content"
+									oncomplete="PF('manageDeviseDialog').show()"
+									styleClass="edit-button rounded-button success-button"
+									process="@this">
+									<f:setPropertyActionListener value="#{devise}"
+										target="#{deviseControllerView.selectedDevise}" />
+								</p:commandButton>
+								<p:commandButton class="warning-button rounded-button"
+									icon="pi pi-trash" process="@this"
+									action="#{deviseControllerView.deleteDevise()}">
+									<f:setPropertyActionListener value="#{devise}"
+										target="#{deviseControllerView.selectedDevise}" />
+									<p:confirm header="Confirmation" message="Etes vous sure ?"
+										icon="pi pi-info-circle" />
+
+								</p:commandButton>
+							</p:column>
+
+
+						</p:dataTable>
+
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+							responsive="true" width="350">
+							<p:commandButton value="Non" type="button"
+								styleClass="ui-confirmdialog-no ui-button-flat" />
+							<p:commandButton value="Oui" type="button"
+								styleClass="ui-confirmdialog-yes" />
+						</p:confirmDialog>
+						<p:dialog header="Devise" width="450" showEffect="fade"
+							modal="true" widgetVar="manageDeviseDialog" responsive="true">
+							<p:outputPanel id="manage-product-content" class="ui-fluid">
+								<p:outputPanel
+									rendered="#{not empty deviseControllerView.selectedDevise}">
+									<div class="p-field">
+										<p:outputLabel for="name">Nom</p:outputLabel>
+										<p:inputText id="name"
+											value="#{deviseControllerView.selectedDevise.deviseNom}"
+											 />
+										<p:inputText id="deviseId" type="hidden"
+											value="#{deviseControllerView.selectedDevise.deviseId}" />
+									</div>
+
+									<div class="p-field">
+										<p:outputLabel for="symb">Symb</p:outputLabel>
+										<p:inputText id="symb"
+											value="#{deviseControllerView.selectedDevise.deviseSymb}"
+											 />
+									</div>
+
+
+								</p:outputPanel>
+							</p:outputPanel>
+
+							<f:facet name="footer">
+								<p:commandButton value="Save" icon="pi pi-check"
+									actionListener="#{deviseControllerView.saveDevise}"
+									update="manage-product-content"
+									process="manage-product-content @this" />
+								<p:commandButton value="Cancel" icon="pi pi-times"
+									onclick="PF('manageDeviseDialog').hide()"
+									class="secondary-button" />
+							</f:facet>
+						</p:dialog>
+
+
+
+					</div>
+				</div>
+			</div>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>
